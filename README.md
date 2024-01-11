@@ -4,3 +4,4 @@ This project is intended to test the following website: https://www.saucedemo.co
 # Prerequisites
 - python and pip installed
 - pip install selenium
+- pip install parameterized
