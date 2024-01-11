@@ -6,27 +6,17 @@ from selenium.common.exceptions import NoSuchElementException
 from parameterized import parameterized
 from selenium import webdriver
 import unittest
+import page
 
 class PyhonTestCase(unittest.TestCase):
 
-    TIMEOUT = 5
+    TIMEOUT = 3
     def setUp(self):
         self.driver = webdriver.Chrome()
+        self.driver.get("https://www.saucedemo.com")
 
     def tearDown(self):
         self.driver.close()
-
-    def get_element(self, by:By, type:str, value:str) -> WebElement :
-        try:
-            element = self.driver.find_element(by, f'//{type}[@id="{value}"]')
-        except NoSuchElementException:
-            element = None
-
-        if not element:
-            self.fail(f'Element <{type}> with id:{value} not found ')
-        
-        return element
-
 
     @parameterized.expand([
         ["standard_user", "secret_sauce"],
@@ -34,26 +24,19 @@ class PyhonTestCase(unittest.TestCase):
         ["problem_user", "secret_sauce"],
         ["performance_glitch_user", "secret_sauce"],
         ["error_user", "secret_sauce"],
-        ["visual_error", "secret_sauce"],
+        ["visual_user", "secret_sauce"],
     ])
     def test_case_1(self, username, password):
         driver = self.driver
-        driver.get("https://www.saucedemo.com")
+        driver.implicitly_wait(self.TIMEOUT)
 
-        username_input = driver.find_element(by=By.XPATH, value='//input[@id="user-name"]')
-        password_input = driver.find_element(by=By.XPATH, value='//input[@id="password"]')
-        submit_button = driver.find_element(by=By.XPATH, value='//input[@id="login-button"]')
+        login = page.LoginPage(driver)
+        login.username_input = username
+        login.password_input = password
+        login.click_submit()
 
-        username_input.send_keys(username)
-        password_input.send_keys(password)
-        submit_button.click()
-        
-        try:
-            _ = WebDriverWait(driver, self.TIMEOUT).until(
-                expected_conditions.presence_of_element_located((By.ID, 'inventory_container'))
-            )
-        except:
-            self.fail('inventory not shown after login')
+        wait = WebDriverWait(driver, self.TIMEOUT)
+        wait.until(expected_conditions.presence_of_element_located((By.ID, 'inventory_container')))
 
 if __name__ == '__main__':
     unittest.main()
