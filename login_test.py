@@ -26,7 +26,7 @@ class PyhonTestCase(unittest.TestCase):
         ["error_user", "secret_sauce"],
         ["visual_user", "secret_sauce"],
     ])
-    def test_case_1(self, username, password):
+    def test_happy_path(self, username, password):
         driver = self.driver
 
         login = page.LoginPage(driver)
@@ -39,12 +39,30 @@ class PyhonTestCase(unittest.TestCase):
                 expected_conditions.presence_of_element_located((By.ID, 'inventory_container'))
             )
             return
-        except: pass
+        except: 
+            self.fail(f'Unable to login, error: {login.get_error()}')
 
-        if(login.get_error() != ""):
-            self.fail(login.get_error())
-        else:
-            self.fail('timeout')
+    @parameterized.expand([
+        ["standard_user", "secret_auce"],
+        ["locked_out_user", "ecret_sauce"],
+        ["problem_user", "secre_sauce"],
+        ["performance_glitch_user", "scret_sauce"],
+        ["error_user", "secret_sauc"],
+        ["visual_user", "secretsauce"],
+    ])
+    def test_wrong_password(self, username, password):
+        driver = self.driver
+
+        login = page.LoginPage(driver)
+        login.username_input = username
+        login.password_input = password
+        login.click_submit()
+
+        error = login.get_error()
+        if(not error):
+            self.fail("Login should fail with invalid credentials")
+
+        assert 'Username and password do not match any user in this service' in error
 
 if __name__ == '__main__':
     unittest.main()
