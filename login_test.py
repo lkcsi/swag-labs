@@ -1,18 +1,13 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.by import By
 from parameterized import parameterized
 from selenium import webdriver
 import unittest
 import pages.page as page
-from params import params_from_file
+import pages.locators as locators
+from params.param_loader import params_from_file
 
-def getParams():
-    return [[1,2],[2,3]]
-
-
-class PyhonTestCase(unittest.TestCase):
-
+class LoginTestCase(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome()
@@ -23,7 +18,7 @@ class PyhonTestCase(unittest.TestCase):
         self.driver.close()
 
     @parameterized.expand(
-           params_from_file('users.json')
+           params_from_file('params/users.json')
     )
     def test_happy_path(self, username, password):
         login_page = self.login_page
@@ -35,14 +30,14 @@ class PyhonTestCase(unittest.TestCase):
 
         try:
             WebDriverWait(driver, 3).until(
-                expected_conditions.presence_of_element_located((By.ID, 'inventory_container'))
+                expected_conditions.presence_of_element_located(locators.InventoryPageLocators.ITEM_LIST)
             )
             return
         except: 
             self.fail(f'Unable to login, error: {login_page.error_text}')
 
     @parameterized.expand(
-            params_from_file('invalid_passwords.json')
+            params_from_file('params/invalid_passwords.json')
     )
     def test_wrong_password(self, username, password):
         login = self.login_page

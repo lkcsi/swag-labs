@@ -17,3 +17,8 @@ class TextElement(object):
         driver = obj.driver
         element = driver.find_element(*self.locator)
         return element.text
+
+class ListElement(object):
+    def __get__(self, obj, owner):
+        driver = obj.driver
+        return driver.find_elements(*self.locator)
