@@ -19,3 +19,7 @@ class LoginPage(BasePage):
     def click_submit(self):
         button = self.driver.find_element(*LoginPageLocators.SUBMIT)
         button.click()
+
+    def get_error(self):
+        error = self.driver.find_element(*LoginPageLocators.ERROR)
+        return error.text

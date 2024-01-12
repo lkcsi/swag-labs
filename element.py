@@ -2,16 +2,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class TextElement(object):
     def __set__(self, obj, value):
-        print(obj)
         driver = obj.driver
-        WebDriverWait(driver, 100).until(
-            lambda driver: driver.find_element(*self.locator))
-        driver.find_element(*self.locator).clear()
-        driver.find_element(*self.locator).send_keys(value)
+        element = driver.find_element(*self.locator)
+        element.clear()
+        element.send_keys(value)
 
     def __get__(self, obj, owner):
         driver = obj.driver
-        WebDriverWait(driver, 100).until(
-            lambda driver: driver.find_element(*self.locator))
         element = driver.find_element(*self.locator)
         return element.get_attribute("value")

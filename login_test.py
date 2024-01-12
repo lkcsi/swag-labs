@@ -3,14 +3,14 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 from parameterized import parameterized
 from selenium import webdriver
 import unittest
-import page
+import page, locators
 
 class PyhonTestCase(unittest.TestCase):
 
-    TIMEOUT = 3
     def setUp(self):
         self.driver = webdriver.Chrome()
         self.driver.get("https://www.saucedemo.com")
@@ -28,15 +28,23 @@ class PyhonTestCase(unittest.TestCase):
     ])
     def test_case_1(self, username, password):
         driver = self.driver
-        driver.implicitly_wait(self.TIMEOUT)
 
         login = page.LoginPage(driver)
         login.username_input = username
         login.password_input = password
         login.click_submit()
 
-        wait = WebDriverWait(driver, self.TIMEOUT)
-        wait.until(expected_conditions.presence_of_element_located((By.ID, 'inventory_container')))
+        try:
+            WebDriverWait(driver, 3).until(
+                expected_conditions.presence_of_element_located((By.ID, 'inventory_container'))
+            )
+            return
+        except: pass
+
+        if(login.get_error() != ""):
+            self.fail(login.get_error())
+        else:
+            self.fail('timeout')
 
 if __name__ == '__main__':
     unittest.main()
