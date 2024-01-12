@@ -1,6 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
 
-class TextElement(object):
+class ValueElement(object):
     def __set__(self, obj, value):
         driver = obj.driver
         element = driver.find_element(*self.locator)
@@ -11,3 +11,9 @@ class TextElement(object):
         driver = obj.driver
         element = driver.find_element(*self.locator)
         return element.get_attribute("value")
+        
+class TextElement(object):
+    def __get__(self, obj, owner):
+        driver = obj.driver
+        element = driver.find_element(*self.locator)
+        return element.text

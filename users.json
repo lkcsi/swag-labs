@@ -1,0 +1,8 @@
+[
+    {"user": "standard_user", "pwd": "secret_sauce"},
+    {"user": "locked_out_user", "pwd": "secret_sauce"},
+    {"user": "problem_user", "pwd": "secret_sauce"},
+    {"user": "performance_glitch_user", "pwd": "secret_sauce"},
+    {"user": "error_user", "pwd": "secret_sauce"},
+    {"user": "visual_user", "pwd": "secret_sauce"}
+]

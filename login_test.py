@@ -1,38 +1,37 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
 from parameterized import parameterized
 from selenium import webdriver
 import unittest
-import page, locators
+import pages.page as page
+from params import params_from_file
+
+def getParams():
+    return [[1,2],[2,3]]
+
 
 class PyhonTestCase(unittest.TestCase):
+
 
     def setUp(self):
         self.driver = webdriver.Chrome()
         self.driver.get("https://www.saucedemo.com")
+        self.login_page = page.LoginPage(self.driver)
 
     def tearDown(self):
         self.driver.close()
 
-    @parameterized.expand([
-        ["standard_user", "secret_sauce"],
-        ["locked_out_user", "secret_sauce"],
-        ["problem_user", "secret_sauce"],
-        ["performance_glitch_user", "secret_sauce"],
-        ["error_user", "secret_sauce"],
-        ["visual_user", "secret_sauce"],
-    ])
+    @parameterized.expand(
+           params_from_file('users.json')
+    )
     def test_happy_path(self, username, password):
+        login_page = self.login_page
         driver = self.driver
 
-        login = page.LoginPage(driver)
-        login.username_input = username
-        login.password_input = password
-        login.click_submit()
+        login_page.username_input = username
+        login_page.password_input = password
+        login_page.click_submit()
 
         try:
             WebDriverWait(driver, 3).until(
@@ -40,29 +39,34 @@ class PyhonTestCase(unittest.TestCase):
             )
             return
         except: 
-            self.fail(f'Unable to login, error: {login.get_error()}')
+            self.fail(f'Unable to login, error: {login_page.error_text}')
 
-    @parameterized.expand([
-        ["standard_user", "secret_auce"],
-        ["locked_out_user", "ecret_sauce"],
-        ["problem_user", "secre_sauce"],
-        ["performance_glitch_user", "scret_sauce"],
-        ["error_user", "secret_sauc"],
-        ["visual_user", "secretsauce"],
-    ])
+    @parameterized.expand(
+            params_from_file('invalid_passwords.json')
+    )
     def test_wrong_password(self, username, password):
-        driver = self.driver
-
-        login = page.LoginPage(driver)
+        login = self.login_page
         login.username_input = username
         login.password_input = password
         login.click_submit()
 
-        error = login.get_error()
+        error = login.error_text
         if(not error):
             self.fail("Login should fail with invalid credentials")
 
         assert 'Username and password do not match any user in this service' in error
+
+    def test_username_is_required(self):
+        login = self.login_page
+        login.password_input = "test"
+        login.click_submit()
+        assert 'Username is required' in login.error_text
+
+    def test_password_is_required(self):
+        login = self.login_page
+        login.username_input = "test"
+        login.click_submit()
+        assert 'Password is required' in login.error_text
 
 if __name__ == '__main__':
     unittest.main()
