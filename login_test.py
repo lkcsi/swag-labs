@@ -1,31 +1,36 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from parameterized import parameterized
+from selenium.common.exceptions import TimeoutException
+from parameterized import parameterized_class
 from selenium import webdriver
+from database.database import users
 import unittest
-import pages.page as page
-import pages.locators as locators
-from params.param_loader import params_from_file
 
+from pages.login_page import LoginPage
+import pages.locators as locators
+
+
+@parameterized_class(
+    users()
+)
 class LoginTestCase(unittest.TestCase):
+    username = ''
+    password = ''
 
     def setUp(self):
         self.driver = webdriver.Chrome()
         self.driver.get("https://www.saucedemo.com")
-        self.login_page = page.LoginPage(self.driver)
+        self.login_page = LoginPage(self.driver)
 
     def tearDown(self):
         self.driver.close()
 
-    @parameterized.expand(
-           params_from_file('params/users.json')
-    )
-    def test_happy_path(self, username, password):
+    def test_happy_path(self):
         login_page = self.login_page
         driver = self.driver
 
-        login_page.username_input = username
-        login_page.password_input = password
+        login_page.username_input = self.username
+        login_page.password_input = self.password
         login_page.click_submit()
 
         try:
@@ -33,23 +38,31 @@ class LoginTestCase(unittest.TestCase):
                 expected_conditions.presence_of_element_located(locators.InventoryPageLocators.ITEM_LIST)
             )
             return
-        except: 
+        except TimeoutException:
             self.fail(f'Unable to login, error: {login_page.error_text}')
 
-    @parameterized.expand(
-            params_from_file('params/invalid_passwords.json')
-    )
-    def test_wrong_password(self, username, password):
+    def test_wrong_password(self):
         login = self.login_page
-        login.username_input = username
-        login.password_input = password
+        login.username_input = self.username
+        login.password_input = 'invalid'
         login.click_submit()
 
         error = login.error_text
-        if(not error):
+        if not error:
             self.fail("Login should fail with invalid credentials")
 
         assert 'Username and password do not match any user in this service' in error
+
+
+class MissingParameters(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("https://www.saucedemo.com")
+        self.login_page = LoginPage(self.driver)
+
+    def tearDown(self):
+        self.driver.close()
 
     def test_username_is_required(self):
         login = self.login_page
@@ -62,6 +75,7 @@ class LoginTestCase(unittest.TestCase):
         login.username_input = "test"
         login.click_submit()
         assert 'Password is required' in login.error_text
+
 
 if __name__ == '__main__':
     unittest.main()
