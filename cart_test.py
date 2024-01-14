@@ -1,10 +1,9 @@
 import database.database as database
 from parameterized import parameterized_class
-from selenium import webdriver
-from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
+from pages.cart_page import CartPage
 from pages.details_page import DetailsPage
-from pages.header import Cart
+from pages.header import Cart, SecondaryHeader
 import unittest
 from base_test import BaseTestCase
 
@@ -42,6 +41,26 @@ class CartTest(BaseTestCase, unittest.TestCase):
             self.remove(idx, details_page.item.click_remove)
 
             self.driver.back()
+
+    def test_cart_content(self):
+        self.login()
+        inventory_page = InventoryPage(self.driver)
+
+        items_to_buy = inventory_page.items
+        for item in items_to_buy:
+            item.click_add()
+
+        Cart(self.driver).click()
+        cart_page = CartPage(self.driver)
+        title = SecondaryHeader(self.driver).title()
+        self.assertEqual("Your Cart", title)
+
+        items_in_cart = cart_page.items
+        self.assertEqual(len(items_to_buy), len(items_in_cart))
+
+        for idx, item in enumerate(items_in_cart):
+            item_to_buy = items_to_buy[idx]
+            self.compare(idx, item_to_buy, item)
 
     def add(self, idx, click):
         self.logger.info(f"click item_{idx} add to cart button")

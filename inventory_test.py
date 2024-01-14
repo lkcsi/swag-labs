@@ -36,25 +36,16 @@ class InventoryTestCase(BaseTestCase):
     def open_with(self, with_func):
         self.login()
         inventory_page = InventoryPage(self.driver)
-        details_page = DetailsPage(self.driver)
 
         page_items = inventory_page.items
         for idx, item in enumerate(page_items):
-            item_map = item.get_map()
-
             with_func(item)
+            details_page = DetailsPage(self.driver)
 
             details_item = details_page.item
-            self.compare("title", idx, item_map, details_item)
-            self.compare("description", idx, item_map, details_item)
-            self.compare("price", idx, item_map, details_item)
-            self.compare("image", idx, item_map, details_item)
+            self.compare(idx, item, details_item)
 
             self.driver.back()
-
-    def compare(self, attribute, idx, web_item, db_item):
-        with self.subTest():
-            self.assertEqual(web_item[attribute], db_item[attribute])
 
     def tearDown(self):
         self.driver.close()

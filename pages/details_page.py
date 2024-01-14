@@ -1,9 +1,18 @@
 from pages.locators import DetailsPageLocators
+from pages.element import ImageItem
 
 
-class DetailsItem(object):
+class DetailsItem(ImageItem):
+
+    title_locator = DetailsPageLocators.ITEM_TITLE
+    desc_locator = DetailsPageLocators.ITEM_DESC
+    price_locator = DetailsPageLocators.ITEM_PRICE
+    image_locator = DetailsPageLocators.ITEM_IMG
+
     def __init__(self, driver):
         self.driver = driver
+        container = self.driver.find_element(*DetailsPageLocators.CONTAINER)
+        super().__init__(container)
 
     def click_add(self):
         container = self.driver.find_element(*DetailsPageLocators.CONTAINER)
@@ -14,18 +23,6 @@ class DetailsItem(object):
         container = self.driver.find_element(*DetailsPageLocators.CONTAINER)
         button = container.find_element(*DetailsPageLocators.ADD_BUTTON)
         button.click()
-
-    def __getitem__(self, key):
-        container = self.driver.find_element(*DetailsPageLocators.CONTAINER)
-        if key == "title":
-            return container.find_element(*DetailsPageLocators.ITEM_TITLE).text
-        elif key == "description":
-            return container.find_element(*DetailsPageLocators.ITEM_DESC).text
-        elif key == "price":
-            return container.find_element(*DetailsPageLocators.ITEM_PRICE).text
-        elif key == "image":
-            image = container.find_element(*DetailsPageLocators.ITEM_IMG)
-            return image.get_attribute("src").split("/")[-1]
 
 
 class DetailsPage(object):

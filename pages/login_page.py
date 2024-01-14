@@ -3,6 +3,7 @@ from selenium.common.exceptions import TimeoutException
 from pages.locators import LoginPageLocators
 from pages.locators import InventoryPageLocators
 from pages.page import BasePage
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class UsernameElement(ValueElement):
@@ -28,7 +29,9 @@ class LoginPage(BasePage):
 
     def _loaded(self):
         try:
-            WebDriverWait(self.driver, 3).until(lambda d: d.find_element(*InventoryPageLocators.ITEM_LIST))
+            WebDriverWait(self.driver, 3).until(
+                lambda d: d.find_element(*InventoryPageLocators.ITEM_LIST)
+            )
             return True
         except TimeoutException:
             return False

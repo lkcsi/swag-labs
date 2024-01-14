@@ -1,6 +1,6 @@
-from pages.locators import InventoryPageLocators
+from pages.locators import InventoryPageLocators, ItemLocators
 from selenium.webdriver.support.ui import WebDriverWait
-
+from pages.element import ImageItem
 from selenium.webdriver.common.by import By
 
 
@@ -11,28 +11,12 @@ class SortBy:
     HILO = "hilo"
 
 
-class InventoryItem(object):
+class InventoryItem(ImageItem):
+    image_locator = InventoryPageLocators.ITEM_IMG
+
     def __init__(self, elem):
         self.elem = elem
-
-    def get_map(self) -> dict:
-        return {
-            "title": self.__getitem__("title"),
-            "description": self.__getitem__("description"),
-            "price": self.__getitem__("price"),
-            "image": self.__getitem__("image"),
-        }
-
-    def __getitem__(self, key):
-        if key == "title":
-            return self.elem.find_element(*InventoryPageLocators.ITEM_TITLE).text
-        elif key == "description":
-            return self.elem.find_element(*InventoryPageLocators.ITEM_DESC).text
-        elif key == "price":
-            return self.elem.find_element(*InventoryPageLocators.ITEM_PRICE).text
-        elif key == "image":
-            image = self.elem.find_element(*InventoryPageLocators.ITEM_IMG)
-            return image.get_attribute("src").split("/")[-1]
+        super().__init__(elem)
 
     def click_image(self):
         image = self.elem.find_element(*InventoryPageLocators.ITEM_IMG)
@@ -47,33 +31,20 @@ class InventoryItem(object):
         button.click()
 
     def click_title(self):
-        title = self.elem.find_element(*InventoryPageLocators.ITEM_TITLE)
+        title = self.elem.find_element(*ItemLocators.ITEM_TITLE)
         title.click()
-
-
-class InventoryItems:
-    def __init__(self, driver):
-        self.driver = driver
-
-    def __getitem__(self, key):
-        driver = self.driver
-        items = driver.find_elements(*InventoryPageLocators.ITEM)
-        return InventoryItem(items[key])
-
-    def __len__(self):
-        driver = self.driver
-        items = driver.find_elements(*InventoryPageLocators.ITEM)
-        return len(items)
 
 
 class InventoryPage:
     def __init__(self, driver):
         self.driver = driver
-        self.items = InventoryItems(driver)
+        self.items = [InventoryItem(i) for i in driver.find_elements(*InventoryPageLocators.ITEM)]
 
     def sort(self, by: SortBy):
         sort = self.driver.find_element(*InventoryPageLocators.SORT)
         sort.click()
         locator = f'//option[@value="{str(by)}"]'
-        option = WebDriverWait(self.driver, 3).until(lambda d: d.find_element(By.XPATH, locator))
+        option = WebDriverWait(self.driver, 3).until(
+            lambda d: d.find_element(By.XPATH, locator)
+        )
         option.click()
