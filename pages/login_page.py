@@ -1,5 +1,4 @@
 from pages.element import *
-from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import TimeoutException
 from pages.locators import LoginPageLocators
 from pages.locators import InventoryPageLocators
@@ -29,9 +28,7 @@ class LoginPage(BasePage):
 
     def _loaded(self):
         try:
-            WebDriverWait(self.driver, 3).until(
-                ec.presence_of_element_located(InventoryPageLocators.ITEM_LIST)
-            )
+            WebDriverWait(self.driver, 3).until(lambda d: d.find_element(*InventoryPageLocators.ITEM_LIST))
             return True
         except TimeoutException:
             return False

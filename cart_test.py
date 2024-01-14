@@ -6,83 +6,60 @@ from pages.inventory_page import InventoryPage
 from pages.details_page import DetailsPage
 from pages.header import Cart
 import unittest
-import logging
+from base_test import BaseTestCase
 
 
-@parameterized_class(
-    database.users()
-)
-class MyTestCase(unittest.TestCase):
-    logger = logging.getLogger()
-    username = ''
-    password = ''
-    expected = 0
-    success = True
-
+@parameterized_class(database.users())
+class CartTest(BaseTestCase, unittest.TestCase):
     def setUp(self):
-        self.logger.setLevel(logging.INFO)
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://www.saucedemo.com")
-
-        self.login_page = LoginPage(self.driver)
-        self.inventory_page = InventoryPage(self.driver)
-        self.details_page = DetailsPage(self.driver)
+        super(CartTest, self).setUp()
+        self.expected = 0
         self.cart = Cart(self.driver)
-
-    def login(self):
-        login_page = self.login_page
-        if not login_page.login(self.username, self.password):
-            self.fail('timeout')
 
     def test_inventory_cart_counter(self):
         self.login()
-        inventory_page = self.inventory_page
+        inventory_page = InventoryPage(self.driver)
 
-        assert self.cart.counter() is 0
-        for idx, item in enumerate(inventory_page.items):
-            item.click_add()
-            self.add(idx, self.cart.counter())
+        self.assertEqual(0, self.cart.counter())
 
         for idx, item in enumerate(inventory_page.items):
-            item.click_add()
-            self.remove(idx, self.cart.counter())
+            self.add(idx, item.click_add)
 
-        self.assertTrue(self.success, "Counter should be match user interaction")
+        for idx, item in enumerate(inventory_page.items):
+            self.remove(idx, item.click_remove)
 
     def test_item_details_cart_counter(self):
         self.login()
-        inventory_page = self.inventory_page
-        details_page = self.details_page
+        inventory_page = InventoryPage(self.driver)
+        details_page = DetailsPage(self.driver)
 
-        assert self.cart.counter() is 0
+        self.assertEqual(0, self.cart.counter())
+
         for idx, item in enumerate(inventory_page.items):
             item.click_image()
-            details_page.item.click_add()
-            self.add(idx, self.cart.counter())
-            details_page.item.click_add()
-            self.remove(idx, self.cart.counter())
+
+            self.add(idx, details_page.item.click_add)
+            self.remove(idx, details_page.item.click_remove)
+
             self.driver.back()
 
-        self.assertTrue(self.success, "Counter should be match user interaction")
-
-    def add(self, idx, actual):
-        self.logger.info(f'click item_{idx} add to cart button')
+    def add(self, idx, click):
+        self.logger.info(f"click item_{idx} add to cart button")
+        click()
         self.expected += 1
-        self.check(actual)
+        self.check(self.cart.counter())
 
-    def remove(self, idx, actual):
-        self.logger.info(f'click item_{idx} remove to cart button')
+    def remove(self, idx, click):
+        self.logger.info(f"click item_{idx} remove to cart button")
+        click()
         self.expected -= 1
-        self.check(actual)
+        self.check(self.cart.counter())
 
     def check(self, actual):
-        self.logger.info(f'expected: {self.expected} == actual: {actual}')
-        if not self.expected == actual:
-            self.success = False
-
-    def tearDown(self):
-        self.driver.close()
+        self.logger.info(f"cart counter expected: {self.expected} == actual: {actual}")
+        with self.subTest():
+            self.assertEqual(self.expected, actual)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

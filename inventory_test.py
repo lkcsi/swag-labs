@@ -6,30 +6,12 @@ from pages.details_page import DetailsPage
 import logging
 from parameterized import parameterized_class
 from database.database import users
+from base_test import BaseTestCase
 
 
-@parameterized_class(
-    users()
-)
-class InventoryTestCase(unittest.TestCase):
-    logger = logging.getLogger()
-    username = ''
-    password = ''
-    error = False
-
-    def setUp(self):
-        self.logger.setLevel(logging.WARNING)
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://www.saucedemo.com")
-        self.login_page = LoginPage(self.driver)
-        self.inventory_page = InventoryPage(self.driver)
-
-    def login(self):
-        login_page = self.login_page
-        if not login_page.login(self.username, self.password):
-            self.fail('timeout')
-
-    #def test_inventory_items(self):
+@parameterized_class(users())
+class InventoryTestCase(BaseTestCase):
+    # def test_inventory_items(self):
     #    self.login()
     #    inventory_page = self.inventory_page
     #    page_items = inventory_page.items
@@ -53,7 +35,7 @@ class InventoryTestCase(unittest.TestCase):
 
     def open_with(self, with_func):
         self.login()
-        inventory_page = self.inventory_page
+        inventory_page = InventoryPage(self.driver)
         details_page = DetailsPage(self.driver)
 
         page_items = inventory_page.items
@@ -62,24 +44,21 @@ class InventoryTestCase(unittest.TestCase):
 
             with_func(item)
 
-            sh_item = details_page.item
-            self.compare('title', idx, item_map, sh_item)
-            self.compare('description', idx, item_map, sh_item)
-            self.compare('price', idx, item_map, sh_item)
-            self.compare('image', idx, item_map, sh_item)
+            details_item = details_page.item
+            self.compare("title", idx, item_map, details_item)
+            self.compare("description", idx, item_map, details_item)
+            self.compare("price", idx, item_map, details_item)
+            self.compare("image", idx, item_map, details_item)
 
             self.driver.back()
 
-        self.assertFalse(self.error, 'Item details should be the same in the inventory page and the details page')
-
     def compare(self, attribute, idx, web_item, db_item):
-        if web_item[attribute] != db_item[attribute]:
-            self.logger.warning(f'item_{idx} {attribute} mismatch {web_item[attribute]} != {db_item[attribute]}')
-            self.error = True
+        with self.subTest():
+            self.assertEqual(web_item[attribute], db_item[attribute])
 
     def tearDown(self):
         self.driver.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
