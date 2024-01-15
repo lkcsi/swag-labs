@@ -14,37 +14,46 @@ class SortBy:
 class InventoryItem(ImageItem):
     image_locator = InventoryPageLocators.ITEM_IMG
 
-    def __init__(self, elem):
-        self.elem = elem
+    def __init__(self, driver, key):
+        self.key = key
+        self.driver = driver
+        elem = driver.find_elements(*InventoryPageLocators.ITEM)[key]
         super().__init__(elem)
 
     def click_image(self):
-        image = self.elem.find_element(*InventoryPageLocators.ITEM_IMG)
+        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
+        image = elem.find_element(*InventoryPageLocators.ITEM_IMG)
         image.click()
 
     def click_add(self):
-        button = self.elem.find_element(*InventoryPageLocators.ADD_BUTTON)
+        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
+        button = elem.find_element(*InventoryPageLocators.ADD_BUTTON)
         button.click()
 
     def click_remove(self):
-        button = self.elem.find_element(*InventoryPageLocators.ADD_BUTTON)
+        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
+        button = elem.find_element(*InventoryPageLocators.ADD_BUTTON)
         button.click()
 
     def click_title(self):
-        title = self.elem.find_element(*ItemLocators.ITEM_TITLE)
+        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
+        title = elem.find_element(*ItemLocators.ITEM_TITLE)
         title.click()
 
 
 class InventoryPage:
     def __init__(self, driver):
         self.driver = driver
-        self.items = [InventoryItem(i) for i in driver.find_elements(*InventoryPageLocators.ITEM)]
+
+    def get_items(self):
+        driver = self.driver
+        size = len(driver.find_elements(*InventoryPageLocators.ITEM))
+        return [InventoryItem(driver, i) for i in range(size)]
 
     def sort(self, by: SortBy):
         sort = self.driver.find_element(*InventoryPageLocators.SORT)
         sort.click()
-        locator = f'//option[@value="{str(by)}"]'
         option = WebDriverWait(self.driver, 3).until(
-            lambda d: d.find_element(By.XPATH, locator)
+            lambda d: d.find_element(By.XPATH, f'//option[@value="{str(by)}"]')
         )
         option.click()

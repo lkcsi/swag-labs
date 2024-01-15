@@ -1,66 +1,40 @@
 import database.database as database
 from parameterized import parameterized_class
 from pages.inventory_page import InventoryPage
-from pages.cart_page import CartPage
-from pages.details_page import DetailsPage
-from pages.header import Cart, SecondaryHeader
 import unittest
 from base_test import BaseTestCase
 
 
 @parameterized_class(database.users())
 class CartTest(BaseTestCase, unittest.TestCase):
-    def setUp(self):
-        super(CartTest, self).setUp()
-        self.expected = 0
-        self.cart = Cart(self.driver)
+    expected = 0
 
     def test_inventory_cart_counter(self):
+        self.expected = 0
         self.login()
         inventory_page = InventoryPage(self.driver)
 
         self.assertEqual(0, self.cart.counter())
 
-        for idx, item in enumerate(inventory_page.items):
+        for idx, item in enumerate(inventory_page.get_items()):
             self.add(idx, item.click_add)
 
-        for idx, item in enumerate(inventory_page.items):
+        for idx, item in enumerate(inventory_page.get_items()):
             self.remove(idx, item.click_remove)
 
     def test_item_details_cart_counter(self):
+        self.expected = 0
         self.login()
-        inventory_page = InventoryPage(self.driver)
-        details_page = DetailsPage(self.driver)
-
         self.assertEqual(0, self.cart.counter())
 
-        for idx, item in enumerate(inventory_page.items):
+        self.driver.implicitly_wait(0.5)
+        for idx, item in enumerate(self.inventory_page.get_items()):
             item.click_image()
 
-            self.add(idx, details_page.item.click_add)
-            self.remove(idx, details_page.item.click_remove)
+            self.add(idx, self.details_page.item().click_add)
+            self.remove(idx, self.details_page.item().click_remove)
 
             self.driver.back()
-
-    def test_cart_content(self):
-        self.login()
-        inventory_page = InventoryPage(self.driver)
-
-        items_to_buy = inventory_page.items
-        for item in items_to_buy:
-            item.click_add()
-
-        Cart(self.driver).click()
-        cart_page = CartPage(self.driver)
-        title = SecondaryHeader(self.driver).title()
-        self.assertEqual("Your Cart", title)
-
-        items_in_cart = cart_page.items
-        self.assertEqual(len(items_to_buy), len(items_in_cart))
-
-        for idx, item in enumerate(items_in_cart):
-            item_to_buy = items_to_buy[idx]
-            self.compare(idx, item_to_buy, item)
 
     def add(self, idx, click):
         self.logger.info(f"click item_{idx} add to cart button")

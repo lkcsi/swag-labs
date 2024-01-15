@@ -27,4 +27,8 @@ class DetailsItem(ImageItem):
 
 class DetailsPage(object):
     def __init__(self, driver):
-        self.item = DetailsItem(driver)
+        self.driver = driver
+
+    def item(self):
+        return DetailsItem(self.driver)
+

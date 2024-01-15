@@ -27,6 +27,7 @@ class CartPageLocators(object):
     ITEM = (By.CLASS_NAME, "cart_item")
     CART_QTY = (By.CLASS_NAME, "cart_quantity")
     REMOVE_BUTTON = (By.CLASS_NAME, "cart_button")
+    CHECKOUT_BUTTON = (By.XPATH, "//button[@data-test='checkout']")
 
 
 class HeaderLocators(object):
@@ -43,3 +44,26 @@ class DetailsPageLocators(object):
     ITEM_PRICE = (By.CLASS_NAME, "inventory_details_price")
     ITEM_IMG = (By.TAG_NAME, "img")
     ADD_BUTTON = (By.CLASS_NAME, "btn_inventory")
+
+
+class CheckoutPageLocators(object):
+    CONTAINER = (By.CLASS_NAME, "checkout_info_wrapper")
+    FIRST_NAME = (By.XPATH, "//input[@data-test='firstName']")
+    LAST_NAME = (By.XPATH, "//input[@data-test='lastName']")
+    POSTAL_CODE = (By.XPATH, "//input[@data-test='postalCode']")
+    CONTINUE = (By.XPATH, "//input[@data-test='continue']")
+    CANCEL = (By.XPATH, "//input[@data-test='cancel']")
+    ERROR = (By.XPATH, "//h3[@data-test='error']")
+
+
+class OverviewPageLocators(object):
+    ITEM = (By.CLASS_NAME, "cart_item")
+    QUANTITY = (By.CLASS_NAME, "cart_quantity")
+    SUBTOTAL = (By.CLASS_NAME, "summary_subtotal_label")
+    TOTAL = (By.CLASS_NAME, "summary_total_label")
+    FINISH = (By.XPATH, "//button[@data-test='finish']")
+    CANCEL = (By.XPATH, "//button[@data-test='cancel']")
+
+
+class CompletePageLocators(object):
+    FINISH_BUTTON = (By.XPATH, "//button[@data-test='back-to-products']")

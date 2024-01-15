@@ -37,18 +37,15 @@ class InventoryTestCase(BaseTestCase):
         self.login()
         inventory_page = InventoryPage(self.driver)
 
-        page_items = inventory_page.items
+        page_items = inventory_page.get_items()
         for idx, item in enumerate(page_items):
             with_func(item)
             details_page = DetailsPage(self.driver)
 
-            details_item = details_page.item
+            details_item = details_page.item()
             self.compare(idx, item, details_item)
 
             self.driver.back()
-
-    def tearDown(self):
-        self.driver.close()
 
 
 if __name__ == "__main__":

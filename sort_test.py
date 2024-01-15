@@ -8,7 +8,6 @@ from pages.element import ImageItem
 
 @parameterized_class(users())
 class SortTestCase(BaseTestCase):
-
     def test_order_az(self):
         self.order_by(SortBy.AZ, lambda x: x.title)
 
@@ -28,14 +27,13 @@ class SortTestCase(BaseTestCase):
 
         inventory_page.sort(by)
 
-        items_in_order = inventory_page.items.sort(key=by_func, reverse=reverse)
+        items_in_order = inventory_page.get_items.sort(key=by_func, reverse=reverse)
 
-        for idx, item in enumerate(inventory_page.items):
+        for idx, item in enumerate(inventory_page.get_items):
             with self.subTest():
                 self.compare_by(items_in_order[idx], item, by_func)
 
     def compare_by(self, item_1: ImageItem, item_2: ImageItem, by_func):
-
         self.logger.info(f"expected: {by_func(item_1)} == actual: {by_func(item_2)}")
         self.assertEqual(by_func(item_1), by_func(item_2))
 
