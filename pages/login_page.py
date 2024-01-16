@@ -27,6 +27,14 @@ class LoginPage(BasePage):
         button = self.driver.find_element(*LoginPageLocators.SUBMIT)
         button.click()
 
+    def button_displayed(self):
+        try:
+            button = self.driver.find_element(*LoginPageLocators.SUBMIT)
+            return True
+        except NoSuchElementException:
+            return False
+
+
     def _loaded(self):
         try:
             WebDriverWait(self.driver, 3).until(

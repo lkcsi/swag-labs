@@ -28,13 +28,15 @@ class SortTestCase(BaseTestCase):
         items_in_order = self.inventory_page.get_items()
         items_in_order.sort(key=by_func, reverse=reverse)
 
-        for idx, item in enumerate(self.inventory_page.get_items()):
-            with self.subTest():
-                self.compare_by(items_in_order[idx], item, by_func)
+        self.compare_order(items_in_order, self.inventory_page.get_items(), by_func)
 
-    def compare_by(self, item_1: ImageItem, item_2: ImageItem, by_func):
-        self.logger.info(f"expected: {by_func(item_1)} == actual: {by_func(item_2)}")
-        self.assertEqual(by_func(item_1), by_func(item_2))
+    def compare_order(self, expected_items: list[ImageItem], actual_items: list[ImageItem], by_func):
+
+        expected_items = [by_func(i) for i in expected_items]
+        actual_items = [by_func(i) for i in actual_items]
+
+        self.logger.info(f"expected order: {expected_items} == actual: {actual_items}")
+        self.assertEqual(expected_items, actual_items)
 
 
 if __name__ == "__main__":

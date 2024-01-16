@@ -27,7 +27,7 @@ class ErrorText(TextElement):
     locator = CheckoutPageLocators.ERROR
 
 
-class CheckoutPage(BasePage):
+class CheckoutOnePage(BasePage):
     TITLE = "Checkout: Your Information"
     first_name = FirstName()
     last_name = LastName()

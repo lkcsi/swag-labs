@@ -1,4 +1,5 @@
 from pages.locators import ItemLocators
+from selenium.common.exceptions import NoSuchElementException
 
 
 class BaseElement(object):
@@ -25,14 +26,22 @@ class ValueElement(BaseElement):
 class TextElement(BaseElement):
     def __get__(self, obj, owner):
         driver = obj.driver
-        element = driver.find_element(*self.locator)
-        return element.text
+        try:
+            element = driver.find_element(*self.locator)
+            return element.text
+        except NoSuchElementException:
+            return ""
 
 
 class Item(object):
     title_locator = ItemLocators.ITEM_TITLE
     desc_locator = ItemLocators.ITEM_DESC
     price_locator = ItemLocators.ITEM_PRICE
+
+    def __str__(self):
+        return (
+            f"title: {self.title}, description: {self.description}, price: {self.price}"
+        )
 
     def __init__(self, elem):
         self.title = elem.find_element(*self.title_locator).text
@@ -58,6 +67,9 @@ class ImageItem(Item):
         image = elem.find_element(*self.image_locator)
         self.image = image.get_attribute("src").split("/")[-1]
 
+    def __str__(self):
+        return f"{super().__str__()}, image: {self.image}"
+
     def __eq__(self, other):
         if isinstance(other, ImageItem) and self.image == other.image:
             return True
@@ -71,6 +83,9 @@ class QuantityItem(Item):
         super().__init__(elem)
         quantity = elem.find_element(*self.quantity_locator)
         self.quantity = int(quantity.text)
+
+    def __str__(self):
+        return f"{super().__str__()}, quantity: {self.quantity}"
 
     def __eq__(self, other):
         if isinstance(other, QuantityItem) and self.quantity == other.quantity:

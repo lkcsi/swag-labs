@@ -33,7 +33,7 @@ class CancelButton(BaseElement):
     locator = OverviewPageLocators.CANCEL
 
 
-class OverviewPage:
+class CheckoutTwoPage:
     TITLE = "Checkout: Overview"
     total = Total()
     subtotal = Subtotal()

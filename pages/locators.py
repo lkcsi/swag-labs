@@ -28,6 +28,7 @@ class CartPageLocators(object):
     CART_QTY = (By.CLASS_NAME, "cart_quantity")
     REMOVE_BUTTON = (By.CLASS_NAME, "cart_button")
     CHECKOUT_BUTTON = (By.XPATH, "//button[@data-test='checkout']")
+    CONTINUE_BUTTON = (By.XPATH, "//button[@data-test='continue-shopping']")
 
 
 class HeaderLocators(object):
@@ -35,6 +36,8 @@ class HeaderLocators(object):
     CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
     SEC_SECONDARY_CONTAINER = (By.CLASS_NAME, "header_secondary_container")
     TITLE = (By.CLASS_NAME, "title")
+    BURGER = (By.XPATH, "//button[@id='react-burger-menu-btn']")
+    LOGOUT = (By.XPATH, "//a[@id='logout_sidebar_link']")
 
 
 class DetailsPageLocators(object):

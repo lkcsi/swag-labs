@@ -1,6 +1,17 @@
 from pages.locators import HeaderLocators
 
 
+class Burger(object):
+    def __init__(self, driver):
+        self.driver = driver
+
+    def click(self):
+        self.driver.find_element(*HeaderLocators.BURGER).click()
+
+    def click_logout(self):
+        self.driver.find_element(*HeaderLocators.LOGOUT).click()
+
+
 class Cart(object):
     def __init__(self, driver):
         self.driver = driver

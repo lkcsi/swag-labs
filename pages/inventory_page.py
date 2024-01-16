@@ -14,30 +14,43 @@ class SortBy:
 class InventoryItem(ImageItem):
     image_locator = InventoryPageLocators.ITEM_IMG
 
-    def __init__(self, driver, key):
-        self.key = key
-        self.driver = driver
-        elem = driver.find_elements(*InventoryPageLocators.ITEM)[key]
+    def __init__(self, driver, elem):
         super().__init__(elem)
+        self.driver = driver
+
+        image = elem.find_element(*self.image_locator)
+        self.image_link_locator = (
+            By.ID,
+            image.find_element(By.XPATH, "..").get_attribute("id"),
+        )
+        title = elem.find_element(*ItemLocators.ITEM_TITLE)
+        self.title_link_locator = (
+            By.ID,
+            title.find_element(By.XPATH, "..").get_attribute("id"),
+        )
+
+        data_test = elem.find_element(*InventoryPageLocators.ADD_BUTTON).get_attribute(
+            "data-test"
+        )
+        self.add_button_locator = (By.XPATH, f"//button[@data-test='{data_test}']")
+
+        data_test = data_test.replace("add-to-cart", "remove")
+        self.remove_button_locator = (By.XPATH, f"//button[@data-test='{data_test}']")
 
     def click_image(self):
-        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
-        image = elem.find_element(*InventoryPageLocators.ITEM_IMG)
-        image.click()
+        image_link = self.driver.find_element(*self.image_link_locator)
+        image_link.click()
 
     def click_add(self):
-        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
-        button = elem.find_element(*InventoryPageLocators.ADD_BUTTON)
+        button = self.driver.find_element(*self.add_button_locator)
         button.click()
 
     def click_remove(self):
-        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
-        button = elem.find_element(*InventoryPageLocators.ADD_BUTTON)
+        button = self.driver.find_element(*self.remove_button_locator)
         button.click()
 
     def click_title(self):
-        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[self.key]
-        title = elem.find_element(*ItemLocators.ITEM_TITLE)
+        title = self.driver.find_element(*self.title_link_locator)
         title.click()
 
 
@@ -49,8 +62,8 @@ class InventoryPage:
 
     def get_items(self):
         driver = self.driver
-        size = len(driver.find_elements(*InventoryPageLocators.ITEM))
-        return [InventoryItem(driver, i) for i in range(size)]
+        elements = driver.find_elements(*InventoryPageLocators.ITEM)
+        return [InventoryItem(driver, elem) for elem in elements]
 
     def sort(self, by: SortBy):
         sort = self.driver.find_element(*InventoryPageLocators.SORT)

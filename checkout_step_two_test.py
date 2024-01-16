@@ -1,12 +1,21 @@
 import unittest
 from base_test import BaseTestCase
+from parameterized.parameterized import parameterized_class
+from database.database import users
 
 TAX = 1.08
 
 
+@parameterized_class(users())
 class OverViewTestCase(BaseTestCase):
-    username = "standard_user"
-    password = "secret_sauce"
+    def test_cancel_step_two(self):
+        self.login()
+        self.add_inventory_item(0)
+        self.click_cart()
+        self.click_checkout()
+        self.fill_billing_info()
+        self.continue_to_step_two()
+        self.cancel_step_two()
 
     def test_complete(self):
         self.login()
@@ -14,7 +23,8 @@ class OverViewTestCase(BaseTestCase):
         self.click_cart()
         self.click_checkout()
         self.fill_billing_info()
-        self.overview_page.finish_button.click()
+        self.continue_to_step_two()
+        self.checkout_two_page.finish_button.click()
 
         self.assertEqual(self.complete_page.TITLE, self.get_title())
 
@@ -36,13 +46,13 @@ class OverViewTestCase(BaseTestCase):
         for item in items_to_buy:
             expected += item.price
 
-        actual = self.overview_page.subtotal
+        actual = self.checkout_two_page.subtotal
         actual = OverViewTestCase.convert_to_float(actual)
 
         self.assertEqual(expected, actual)
 
         expected = expected * TAX
-        actual = self.overview_page.total
+        actual = self.checkout_two_page.total
         actual = OverViewTestCase.convert_to_float(actual)
 
         self.assertAlmostEqual(expected, actual, 2)
@@ -62,12 +72,9 @@ class OverViewTestCase(BaseTestCase):
         self.click_checkout()
         self.fill_billing_info()
 
-        overview_items = self.overview_page.get_items()
+        overview_items = self.checkout_two_page.get_items()
 
-        self.assertEqual(len(items_to_buy), len(overview_items))
-        for idx, item_to_buy in enumerate(items_to_buy):
-            overview_item = overview_items[idx]
-            self.compare(idx, item_to_buy, overview_item)
+        self.compare_all_items(items_to_buy, overview_items)
 
 
 if __name__ == "__main__":

@@ -1,9 +1,5 @@
 import unittest
-from selenium import webdriver
-from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
-from pages.details_page import DetailsPage
-import logging
+from pages.inventory_page import InventoryItem
 from parameterized import parameterized_class
 from database.database import users
 from base_test import BaseTestCase
@@ -11,40 +7,51 @@ from base_test import BaseTestCase
 
 @parameterized_class(users())
 class InventoryTestCase(BaseTestCase):
-    # def test_inventory_items(self):
-    #    self.login()
-    #    inventory_page = self.inventory_page
-    #    page_items = inventory_page.items
-    #    db_items = database.items()
-    #    assert len(page_items) == len(db_items)
+    expected = 0
 
-    #    for idx, item in enumerate(page_items):
-    #        self.compare('title', item.to_map(), db_items[idx])
-    #        self.compare('image', item.to_map(), db_items[idx])
-    #        self.compare('price', item.to_map(), db_items[idx])
-    #        self.compare('description', item.to_map(), db_items[idx])
+    def test_cart_counter_from_inventory(self):
+        self.expected = 0
+        self.login()
 
-    #    if self.error:
-    #        self.fail('Items are different than expected')
+        self.__check_counter()
+
+        for idx, item in enumerate(self.inventory_page.get_items()):
+            self.__add(idx, item.click_add)
+            self.__check_counter()
+
+        for idx, item in enumerate(self.inventory_page.get_items()):
+            self.__remove(idx, item.click_remove)
+            self.__check_counter()
+
+    def __add(self, idx, item: InventoryItem):
+        self.logger.info(f"click item_{idx} add to cart button")
+        self.expected += 1
+        item.click_add()
+
+    def __remove(self, idx, item: InventoryItem):
+        self.logger.info(f"click item_{idx} remove button")
+        self.expected -= 1
+        item.click_remove()
+
+    def __check_counter(self):
+        actual = self.cart.counter()
+        self.logger.info(f"cart counter expected: {self.expected} == actual: {actual}")
+        self.assertEqual(self.expected, actual)
 
     def test_open_with_image(self):
-        self.open_with(lambda x: x.click_title())
+        self.__open_with(lambda x: x.click_title())
 
     def test_open_with_title(self):
-        self.open_with(lambda x: x.click_image())
+        self.__open_with(lambda x: x.click_image())
 
-    def open_with(self, with_func):
+    def __open_with(self, open_with_func):
         self.login()
-        inventory_page = InventoryPage(self.driver)
 
-        page_items = inventory_page.get_items()
+        page_items = self.inventory_page.get_items()
         for idx, item in enumerate(page_items):
-            with_func(item)
-            details_page = DetailsPage(self.driver)
-
-            details_item = details_page.item()
+            open_with_func(item)
+            details_item = self.details_page.item()
             self.compare(idx, item, details_item)
-
             self.driver.back()
 
 
