@@ -8,4 +8,5 @@ class BackHomeButton(BaseElement):
 
 
 class CompletePage(BasePage):
+    TITLE = "Checkout: Complete!"
     back_home_button = BackHomeButton()

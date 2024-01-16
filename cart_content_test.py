@@ -16,7 +16,7 @@ class CartTest(BaseTestCase):
 
         self.click_cart()
 
-        self.assertEqual("Your Cart", self.get_title())
+        self.assertEqual(self.cart_page.TITLE, self.get_title())
 
         items_in_cart = self.cart_page.items()
         self.assertEqual(len(items_to_buy), len(items_in_cart))
@@ -34,7 +34,7 @@ class CartTest(BaseTestCase):
 
         self.click_cart()
 
-        self.assertEqual("Your Cart", self.get_title())
+        self.assertEqual(self.cart_page.TITLE, self.get_title())
 
         items_in_cart = self.cart_page.items()
         self.assertEqual(len(items_to_buy), len(items_in_cart))

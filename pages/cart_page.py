@@ -33,6 +33,7 @@ class CheckoutButton(BaseElement):
 
 
 class CartPage:
+    TITLE = "Your Cart"
     checkout_button = CheckoutButton()
 
     def __init__(self, driver):

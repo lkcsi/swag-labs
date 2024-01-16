@@ -1,6 +1,7 @@
 import unittest
 from base_test import BaseTestCase
 from pages.header import SecondaryHeader, Cart
+from parameterized import parameterized
 
 
 class CheckoutTestCase(BaseTestCase):
@@ -8,19 +9,30 @@ class CheckoutTestCase(BaseTestCase):
     password = "secret_sauce"
 
     def test_successful(self):
-        self.proceed("test_name", "test_name", "8888")
+        self.proceed("test_name", "test_name", 8888)
+        self.check_success()
 
-    def test_missing_firstname(self):
-        self.proceed("", "test_name", "8888")
-        self.check_error("First Name")
+    @parameterized.expand(
+        [
+            ["", "last_name", 8888, "First Name"],
+            ["first_name", "", 8888, "Last Name"],
+            ["first_name", "last_name", "", "Postal Code"],
+        ]
+    )
+    def test_missing_input(self, first_name, last_name, postal_code, input_field):
+        self.proceed(first_name, last_name, postal_code)
+        self.check_missing(input_field)
 
-    def test_missing_lastname(self):
-        self.proceed("test_name", "", "8888")
-        self.check_error("Last Name")
-
-    def test_missing_postcode(self):
-        self.proceed("test_name", "test_name", "")
-        self.check_error("Postal Code")
+    @parameterized.expand(
+        [
+            ["!@#$%^", "last_name", 8888],
+            ["first_name", "!@#$%^", 8888],
+            ["first_name", "last_name", "!@#$%^"],
+        ]
+    )
+    def test_wrong_input(self, first_name, last_name, postal_code):
+        self.proceed(first_name, last_name, postal_code)
+        self.check_wrong()
 
     def proceed(self, first_name, last_name, postal_code):
         self.login()
@@ -34,14 +46,29 @@ class CheckoutTestCase(BaseTestCase):
 
         self.checkout_page.continue_button.click()
 
-    def check_error(self, info):
+    def check_missing(self, input_field):
         header = SecondaryHeader(self.driver)
-        self.assertEqual("Checkout: Your Information", header.title())
-        self.assertTrue(f"{info} is required" in self.checkout_page.error_text)
+        self.assertEqual(
+            self.checkout_page.TITLE,
+            header.title(),
+            "Should not proceed with missing input",
+        )
+        self.assertTrue(f"{input_field} is required" in self.checkout_page.error_text)
+
+    def check_wrong(self, input_value):
+        header = SecondaryHeader(self.driver)
+        self.assertEqual(
+            self.checkout_page.TITLE,
+            header.title(),
+            f"Should not proceed with invalid input {input_value}",
+        )
+        self.assertTrue(self.checkout_page.error_text is not "")
 
     def check_success(self):
         header = SecondaryHeader(self.driver)
-        self.assertEqual("Checkout: Overview", header.title())
+        self.assertEqual(
+            self.overview_page.TITLE, header.title(), "Should proceed with valid input"
+        )
 
 
 if __name__ == "__main__":

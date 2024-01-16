@@ -28,6 +28,7 @@ class ErrorText(TextElement):
 
 
 class CheckoutPage(BasePage):
+    TITLE = "Checkout: Your Information"
     first_name = FirstName()
     last_name = LastName()
     postal_code = PostalCode()

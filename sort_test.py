@@ -23,13 +23,12 @@ class SortTestCase(BaseTestCase):
     def order_by(self, by: SortBy, by_func, reverse=False):
         self.login()
 
-        inventory_page = InventoryPage(self.driver)
+        self.inventory_page.sort(by)
 
-        inventory_page.sort(by)
+        items_in_order = self.inventory_page.get_items()
+        items_in_order.sort(key=by_func, reverse=reverse)
 
-        items_in_order = inventory_page.get_items.sort(key=by_func, reverse=reverse)
-
-        for idx, item in enumerate(inventory_page.get_items):
+        for idx, item in enumerate(self.inventory_page.get_items()):
             with self.subTest():
                 self.compare_by(items_in_order[idx], item, by_func)
 

@@ -34,7 +34,7 @@ class CancelButton(BaseElement):
 
 
 class OverviewPage:
-
+    TITLE = "Checkout: Overview"
     total = Total()
     subtotal = Subtotal()
     finish_button = FinishButton()

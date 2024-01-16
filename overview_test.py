@@ -1,6 +1,8 @@
 import unittest
 from base_test import BaseTestCase
 
+TAX = 1.08
+
 
 class OverViewTestCase(BaseTestCase):
     username = "standard_user"
@@ -14,11 +16,11 @@ class OverViewTestCase(BaseTestCase):
         self.fill_billing_info()
         self.overview_page.finish_button.click()
 
-        self.assertEqual("Checkout: Complete!", self.get_title())
+        self.assertEqual(self.complete_page.TITLE, self.get_title())
 
         self.complete_page.back_home_button.click()
 
-        self.assertEqual("Products", self.get_title())
+        self.assertEqual(self.inventory_page.TITLE, self.get_title())
 
     def test_totals(self):
         self.login()
@@ -30,15 +32,25 @@ class OverViewTestCase(BaseTestCase):
         self.click_checkout()
         self.fill_billing_info()
 
-        subtotal = 0
+        expected = 0
         for item in items_to_buy:
-            subtotal += item.price
+            expected += item.price
 
-        actual = self.overview_page.subtotal.replace("Item total: $", "")
-        actual = float(actual)
+        actual = self.overview_page.subtotal
+        actual = OverViewTestCase.convert_to_float(actual)
 
-        self.assertEqual(subtotal, actual)
-        total = subtotal * tax
+        self.assertEqual(expected, actual)
+
+        expected = expected * TAX
+        actual = self.overview_page.total
+        actual = OverViewTestCase.convert_to_float(actual)
+
+        self.assertAlmostEqual(expected, actual, 2)
+
+    @staticmethod
+    def convert_to_float(text: str) -> float:
+        text = text.split("$")[1]
+        return float(text)
 
     def test_overview_items(self):
         self.login()

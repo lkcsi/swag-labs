@@ -42,6 +42,8 @@ class InventoryItem(ImageItem):
 
 
 class InventoryPage:
+    TITLE = "Products"
+
     def __init__(self, driver):
         self.driver = driver
 
