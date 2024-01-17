@@ -1,8 +1,4 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from selenium.common.exceptions import TimeoutException
 from parameterized import parameterized_class
-from selenium import webdriver
 from database.database import users
 import unittest
 

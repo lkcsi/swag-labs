@@ -13,6 +13,7 @@ from selenium import webdriver
 
 
 class BaseTestCase(unittest.TestCase):
+    PAGE_URL = "https://www.saucedemo.com"
     logger = logging.getLogger()
     login_page = None
     inventory_page = None
@@ -31,7 +32,7 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.logger.setLevel(logging.INFO)
         self.driver = webdriver.Chrome()
-        self.driver.get("https://www.saucedemo.com")
+        self.driver.get(self.PAGE_URL)
         self.login_page = LoginPage(self.driver)
         self.inventory_page = InventoryPage(self.driver)
         self.cart_page = CartPage(self.driver)
