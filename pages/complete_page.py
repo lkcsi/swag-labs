@@ -1,6 +1,6 @@
-from pages.locators import CheckoutPageLocators, CompletePageLocators
-from pages.element import ValueElement, BaseElement, TextElement
-from pages.page import BasePage
+from pages.locators import CompletePageLocators
+from pages.element import BaseElement
+from base.base_page import BasePage
 
 
 class BackHomeButton(BaseElement):

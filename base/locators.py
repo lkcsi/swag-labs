@@ -34,7 +34,7 @@ class CartPageLocators(object):
 class HeaderLocators(object):
     CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
     CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
-    SEC_SECONDARY_CONTAINER = (By.CLASS_NAME, "header_secondary_container")
+    SECONDARY_CONTAINER = (By.CLASS_NAME, "header_secondary_container")
     TITLE = (By.CLASS_NAME, "title")
     BURGER = (By.XPATH, "//button[@id='react-burger-menu-btn']")
     LOGOUT = (By.XPATH, "//a[@id='logout_sidebar_link']")
@@ -47,19 +47,20 @@ class DetailsPageLocators(object):
     ITEM_PRICE = (By.CLASS_NAME, "inventory_details_price")
     ITEM_IMG = (By.TAG_NAME, "img")
     ADD_BUTTON = (By.CLASS_NAME, "btn_inventory")
+    BACK = (By.XPATH, "//button[@data-test='back-to-products']")
 
 
-class CheckoutPageLocators(object):
+class CheckoutPageOneLocators(object):
     CONTAINER = (By.CLASS_NAME, "checkout_info_wrapper")
     FIRST_NAME = (By.XPATH, "//input[@data-test='firstName']")
     LAST_NAME = (By.XPATH, "//input[@data-test='lastName']")
     POSTAL_CODE = (By.XPATH, "//input[@data-test='postalCode']")
     CONTINUE = (By.XPATH, "//input[@data-test='continue']")
-    CANCEL = (By.XPATH, "//input[@data-test='cancel']")
+    CANCEL = (By.XPATH, "//button[@data-test='cancel']")
     ERROR = (By.XPATH, "//h3[@data-test='error']")
 
 
-class OverviewPageLocators(object):
+class CheckoutPageTwoLocators(object):
     ITEM = (By.CLASS_NAME, "cart_item")
     QUANTITY = (By.CLASS_NAME, "cart_quantity")
     SUBTOTAL = (By.CLASS_NAME, "summary_subtotal_label")

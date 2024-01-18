@@ -1,9 +1,7 @@
 from pages.element import *
-from selenium.common.exceptions import TimeoutException
 from pages.locators import LoginPageLocators
-from pages.locators import InventoryPageLocators
-from pages.page import BasePage
-from selenium.webdriver.support.ui import WebDriverWait
+from base.base_page import BasePage
+from utilities import file_logger
 
 
 class UsernameElement(ValueElement):
@@ -19,33 +17,20 @@ class LoginErrorElement(TextElement):
 
 
 class LoginPage(BasePage):
+    logger = file_logger()
+
     username_input = UsernameElement()
     password_input = PasswordElement()
     error_text = LoginErrorElement()
 
     def click_submit(self):
+        self.logger.info("click submit button")
         button = self.driver.find_element(*LoginPageLocators.SUBMIT)
         button.click()
 
-    def button_displayed(self):
-        try:
-            button = self.driver.find_element(*LoginPageLocators.SUBMIT)
-            return True
-        except NoSuchElementException:
-            return False
-
-
-    def _loaded(self):
-        try:
-            WebDriverWait(self.driver, 3).until(
-                lambda d: d.find_element(*InventoryPageLocators.ITEM_LIST)
-            )
-            return True
-        except TimeoutException:
-            return False
-
     def login(self, username, password):
+        self.logger.info(f"type username: '{username}'")
         self.username_input = username
+        self.logger.info(f"type password: '{password}'")
         self.password_input = password
         self.click_submit()
-        return self._loaded()
