@@ -49,17 +49,17 @@ class DetailsPageLocators(object):
     ADD_BUTTON = (By.CLASS_NAME, "btn_inventory")
 
 
-class CheckoutPageLocators(object):
+class CheckoutPageOneLocators(object):
     CONTAINER = (By.CLASS_NAME, "checkout_info_wrapper")
     FIRST_NAME = (By.XPATH, "//input[@data-test='firstName']")
     LAST_NAME = (By.XPATH, "//input[@data-test='lastName']")
     POSTAL_CODE = (By.XPATH, "//input[@data-test='postalCode']")
     CONTINUE = (By.XPATH, "//input[@data-test='continue']")
-    CANCEL = (By.XPATH, "//input[@data-test='cancel']")
+    CANCEL = (By.XPATH, "//button[@data-test='cancel']")
     ERROR = (By.XPATH, "//h3[@data-test='error']")
 
 
-class OverviewPageLocators(object):
+class CheckoutPageTwoLocators(object):
     ITEM = (By.CLASS_NAME, "cart_item")
     QUANTITY = (By.CLASS_NAME, "cart_quantity")
     SUBTOTAL = (By.CLASS_NAME, "summary_subtotal_label")

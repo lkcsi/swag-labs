@@ -1,6 +1,7 @@
 from pages.locators import CartPageLocators
 from pages.element import Item, BaseElement
 from selenium.webdriver.common.by import By
+from utilities import file_logger
 
 
 class SortBy:
@@ -40,12 +41,17 @@ class ContinueButton(BaseElement):
 
 
 class CartPage:
+    logger = file_logger()
     TITLE = "Your Cart"
     checkout_button = CheckoutButton()
     continue_button = ContinueButton()
 
     def __init__(self, driver):
         self.driver = driver
+
+    def continue_shopping(self):
+        self.logger.info("click continue shopping button")
+        self.continue_button.click()
 
     def items(self):
         driver = self.driver

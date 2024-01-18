@@ -2,6 +2,7 @@ from pages.locators import InventoryPageLocators, ItemLocators
 from selenium.webdriver.support.ui import WebDriverWait
 from pages.element import ImageItem
 from selenium.webdriver.common.by import By
+from utilities import file_logger
 
 
 class SortBy:
@@ -12,6 +13,7 @@ class SortBy:
 
 
 class InventoryItem(ImageItem):
+    logger = file_logger()
     image_locator = InventoryPageLocators.ITEM_IMG
 
     def __init__(self, driver, elem):
@@ -42,10 +44,12 @@ class InventoryItem(ImageItem):
         image_link.click()
 
     def click_add(self):
+        self.logger.info(f"add {self.title} to cart")
         button = self.driver.find_element(*self.add_button_locator)
         button.click()
 
     def click_remove(self):
+        self.logger.info(f"remove {self.title} from cart")
         button = self.driver.find_element(*self.remove_button_locator)
         button.click()
 
@@ -60,10 +64,18 @@ class InventoryPage:
     def __init__(self, driver):
         self.driver = driver
 
-    def get_items(self):
+    def get_items(self) -> list[InventoryItem]:
         driver = self.driver
         elements = driver.find_elements(*InventoryPageLocators.ITEM)
         return [InventoryItem(driver, elem) for elem in elements]
+
+    def add_item(self, key):
+        element = self.driver.find_elements(*InventoryPageLocators.ITEM)[key]
+        InventoryItem(self.driver, element).click_add()
+
+    def add_all_item(self):
+        for element in self.driver.find_elements(*InventoryPageLocators.ITEM):
+            InventoryItem(self.driver, element).click_add()
 
     def sort(self, by: SortBy):
         sort = self.driver.find_element(*InventoryPageLocators.SORT)

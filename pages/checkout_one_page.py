@@ -1,30 +1,30 @@
-from pages.locators import CheckoutPageLocators
+from pages.locators import CheckoutPageOneLocators
 from pages.element import ValueElement, BaseElement, TextElement
-from pages.page import BasePage
+from base.base_page import BasePage
 
 
 class FirstName(ValueElement):
-    locator = CheckoutPageLocators.FIRST_NAME
+    locator = CheckoutPageOneLocators.FIRST_NAME
 
 
 class LastName(ValueElement):
-    locator = CheckoutPageLocators.LAST_NAME
+    locator = CheckoutPageOneLocators.LAST_NAME
 
 
 class PostalCode(ValueElement):
-    locator = CheckoutPageLocators.POSTAL_CODE
+    locator = CheckoutPageOneLocators.POSTAL_CODE
 
 
 class ContinueButton(BaseElement):
-    locator = CheckoutPageLocators.CONTINUE
+    locator = CheckoutPageOneLocators.CONTINUE
 
 
 class CancelButton(BaseElement):
-    locator = CheckoutPageLocators.CANCEL
+    locator = CheckoutPageOneLocators.CANCEL
 
 
 class ErrorText(TextElement):
-    locator = CheckoutPageLocators.ERROR
+    locator = CheckoutPageOneLocators.ERROR
 
 
 class CheckoutOnePage(BasePage):
@@ -35,3 +35,8 @@ class CheckoutOnePage(BasePage):
     continue_button = ContinueButton()
     cancel_button = CancelButton()
     error_text = ErrorText()
+
+    def fill_info(self, first_name, last_name, postal_code):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.postal_code = postal_code

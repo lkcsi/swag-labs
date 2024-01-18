@@ -3,7 +3,7 @@ import os
 
 
 def users():
-    return _load_json("params/users.json")
+    return _load_json("params/valid_credentials.json")
 
 
 def items():

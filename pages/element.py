@@ -58,6 +58,12 @@ class Item(object):
             and self.price == other.price
         )
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __ne__(self, other: object) -> bool:
+        return not self.__eq__(other)
+
 
 class ImageItem(Item):
     image_locator = ""
@@ -70,10 +76,16 @@ class ImageItem(Item):
     def __str__(self):
         return f"{super().__str__()}, image: {self.image}"
 
-    def __eq__(self, other):
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, ImageItem) and self.image == other.image:
             return True
         return super().__eq__(other)
+
+    def __ne__(self, other: object) -> bool:
+        return not self.__eq__(other)
 
 
 class QuantityItem(Item):
@@ -87,7 +99,13 @@ class QuantityItem(Item):
     def __str__(self):
         return f"{super().__str__()}, quantity: {self.quantity}"
 
+    def __repr__(self):
+        return self.__str__()
+
     def __eq__(self, other):
         if isinstance(other, QuantityItem) and self.quantity == other.quantity:
             return True
         return super().__eq__(other)
+
+    def __ne__(self, other: object) -> bool:
+        return not self.__eq__(other)
