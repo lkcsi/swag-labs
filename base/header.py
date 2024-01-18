@@ -1,5 +1,6 @@
-from pages.locators import HeaderLocators
+from base.locators import HeaderLocators
 from utilities import file_logger
+import pages
 
 
 class Burger(object):
@@ -29,7 +30,8 @@ class Cart(object):
         cart.click()
 
 
-class SecondaryHeader(object):
+class Header(object):
+
     logger = file_logger()
 
     def __init__(self, driver):
@@ -38,13 +40,15 @@ class SecondaryHeader(object):
         self.cart = Cart(driver)
 
     def get_title(self):
-        container = self.driver.find_element(*HeaderLocators.SEC_SECONDARY_CONTAINER)
+        container = self.driver.find_element(*HeaderLocators.SECONDARY_CONTAINER)
         header = container.find_element(*HeaderLocators.TITLE)
         return header.text
 
     def click_cart(self):
         self.logger.info("click cart icon")
         self.cart.click()
+        return pages.CartPage(self.driver)
+
 
     def logout(self):
         self.logger.info("click burger menu")

@@ -1,5 +1,7 @@
-from pages.locators import ItemLocators, CheckoutPageTwoLocators
-from pages.element import QuantityItem, TextElement, BaseElement
+from base.locators import ItemLocators, CheckoutPageTwoLocators
+from base.element import QuantityItem, TextElement, BaseElement
+from utilities import file_logger
+import pages
 
 
 class OverviewItem(QuantityItem):
@@ -39,9 +41,20 @@ class CheckoutTwoPage:
     subtotal = Subtotal()
     finish_button = FinishButton()
     cancel_button = CancelButton()
+    logger = file_logger()
 
     def __init__(self, driver):
         self.driver = driver
+
+    def finish(self):
+        self.logger.info("click finish button")
+        self.finish_button.click()
+        return pages.CompletePage(self.driver)
+
+    def cancel(self):
+        self.logger.info("click cancel button")
+        self.cancel_button.click()
+        return pages.InventoryPage(self.driver)
 
     def get_items(self):
         driver = self.driver

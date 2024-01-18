@@ -1,7 +1,9 @@
-from pages.locators import CartPageLocators
-from pages.element import Item, BaseElement
+from base.locators import CartPageLocators
+from base.element import Item, BaseElement
 from selenium.webdriver.common.by import By
 from utilities import file_logger
+import pages
+
 
 
 class SortBy:
@@ -53,7 +55,12 @@ class CartPage:
         self.logger.info("click continue shopping button")
         self.continue_button.click()
 
-    def items(self):
+    def checkout(self):
+        self.logger.info("click checkout")
+        self.checkout_button.click()
+        return pages.CheckoutOnePage(self.driver)
+
+    def get_items(self):
         driver = self.driver
         elements = driver.find_elements(*CartPageLocators.ITEM)
         return [CartItem(driver, elem) for elem in elements]

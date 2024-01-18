@@ -1,4 +1,5 @@
 [
-    {"first_name": "John", "last_name": "McClane","postal_code": 8888},
-    {"first_name": "Hans", "last_name": "Gruber","postal_code": 8888}
+    {"first_name": "~!@#$%", "last_name": "McClane","postal_code": 8888, "invalid_input": "First Name"},
+    {"first_name": "Hans", "last_name": "~!@#$%","postal_code": 8888, "invalid_input": "Last Name"},
+    {"first_name": "Hans", "last_name": "McClane","postal_code": "~!@#$%", "invalid_input": "Postal Code"}
 ]
