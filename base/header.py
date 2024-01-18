@@ -31,6 +31,7 @@ class Cart(object):
 
 
 class Header(object):
+
     logger = file_logger()
 
     def __init__(self, driver):
@@ -47,6 +48,7 @@ class Header(object):
         self.logger.info("click cart icon")
         self.cart.click()
         return pages.CartPage(self.driver)
+
 
     def logout(self):
         self.logger.info("click burger menu")

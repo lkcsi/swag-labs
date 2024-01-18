@@ -6,4 +6,3 @@ from pages.checkout_two_page import CheckoutTwoPage
 from pages.checkout_one_page import CheckoutOnePage
 from pages.cart_page import CartPage, CartItem
 from pages.complete_page import CompletePage
-

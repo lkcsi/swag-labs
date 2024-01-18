@@ -52,4 +52,3 @@ class DetailsPage(object):
     def back_to_products(self):
         self.logger.info("click back to products")
         self.back.click()
-

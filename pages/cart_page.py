@@ -5,6 +5,7 @@ from utilities import file_logger
 import pages
 
 
+
 class SortBy:
     AZ = "az"
     ZA = "za"
