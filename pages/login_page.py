@@ -1,6 +1,7 @@
-from pages.element import *
-from pages.locators import LoginPageLocators
+from base.element import *
+from base.locators import LoginPageLocators
 from base.base_page import BasePage
+import pages
 from utilities import file_logger
 
 
@@ -34,3 +35,4 @@ class LoginPage(BasePage):
         self.logger.info(f"type password: '{password}'")
         self.password_input = password
         self.click_submit()
+        return pages.InventoryPage(self.driver)

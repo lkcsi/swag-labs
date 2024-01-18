@@ -1,6 +1,4 @@
 [
-    {"username": "standard_user", "password": "secret_sauce"},
-    {"username": "problem_user", "password": "secret_sauce"},
-    {"username": "error_user", "password": "secret_sauce"},
-    {"username": "visual_user", "password": "secret_sauce"}
+    {"first_name": "John", "last_name": "McClane","postal_code": 8888},
+    {"first_name": "Hans", "last_name": "Gruber","postal_code": 8888}
 ]

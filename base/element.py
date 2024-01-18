@@ -1,4 +1,4 @@
-from pages.locators import ItemLocators
+from base.locators import ItemLocators
 from selenium.common.exceptions import NoSuchElementException
 
 

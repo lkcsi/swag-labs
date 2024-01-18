@@ -1,5 +1,5 @@
-from pages.locators import DetailsPageLocators
-from pages.element import ImageItem
+from base.locators import DetailsPageLocators
+from base.element import ImageItem, BaseElement
 from utilities import file_logger
 
 
@@ -29,13 +29,27 @@ class DetailsItem(ImageItem):
         button.click()
 
 
+class BackButton(BaseElement):
+    locator = DetailsPageLocators.BACK
+
+
 class DetailsPage(object):
+    logger = file_logger()
+    back = BackButton()
+
     def __init__(self, driver):
         self.driver = driver
 
-    def item(self):
+    def get_item(self):
         return DetailsItem(self.driver)
 
     def add_item(self):
         DetailsItem(self.driver).click_add()
+
+    def remove_item(self):
+        DetailsItem(self.driver).click_remove()
+
+    def back_to_products(self):
+        self.logger.info("click back to products")
+        self.back.click()
 

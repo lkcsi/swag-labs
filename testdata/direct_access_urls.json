@@ -1,5 +1,4 @@
 [
-  {"url": "checkout-step-one"},
-  {"url": "checkout-step-two"},
-  {"url": "checkout-complete"}
+  {"url": "inventory", "page":  "Products"},
+  {"url": "cart", "page": "Your Cart"}
 ]

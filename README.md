@@ -6,7 +6,7 @@ This project is intended to test the following website: https://www.saucedemo.co
 - pip install selenium
 - pip install parameterized
 - pip install pytest
-- pip install ddt
+- pip install softest
 - pip install pytest-html
 
 # Test run
