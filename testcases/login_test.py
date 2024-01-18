@@ -5,9 +5,7 @@ from utilities import params_from_json as params
 
 class TestValidParameters:
     @pytest.mark.usefixtures("setup", "login_page", "header")
-    @pytest.mark.parametrize(
-        "username,password", params("../testdata/valid_credentials.json")
-    )
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_login_with_valid_credentials(self, username, password):
         self.login_page.login(username, password)
         assert InventoryPage.TITLE == self.header.get_title()
@@ -15,9 +13,7 @@ class TestValidParameters:
 
 class TestWrongParameters:
     @pytest.mark.usefixtures("setup", "login_page")
-    @pytest.mark.parametrize(
-        "username,password", params("../testdata/invalid_credentials.json")
-    )
+    @pytest.mark.parametrize("username,password", params("../testdata/invalid_credentials.json"))
     def test_wrong_password(self, username, password):
         self.login_page.login(username, password)
 

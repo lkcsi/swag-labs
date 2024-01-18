@@ -1,27 +1,25 @@
-# import unittest
-# from parameterized import parameterized_class
-# from database.database import users
-# from base_test import BaseTestCase
-#
-#
-# @parameterized_class(users())
-# class DetailsTest(BaseTestCase):
-#     def test_open_with_image(self):
-#         self.__open_with(lambda x: x.click_title())
-#
-#     def test_open_with_title(self):
-#         self.__open_with(lambda x: x.click_image())
-#
-#     def __open_with(self, open_with_func):
-#         self.login()
-#
-#         page_items = self.sauce_demo.inventory_page.get_items()
-#         for idx, item in enumerate(page_items):
-#             open_with_func(item)
-#             details_item = self.sauce_demo.details_page.item()
-#             self.compare(idx, item, details_item)
-#             self.sauce_demo.back()
-#
-#
-# if __name__ == "__main__":
-#     unittest.main()
+import pytest
+from utilities import params_from_json as params
+
+
+class TestItemDetails:
+
+    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    def test_open_with_image(self, username, password):
+        inventory_page = self.login_page.login(username, password)
+        self.open_with(lambda x: x.click_title(), inventory_page)
+
+    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    def test_open_with_title(self, username, password):
+        inventory_page = self.login_page.login(username, password)
+        self.open_with(lambda x: x.click_image(), inventory_page)
+
+    @staticmethod
+    def open_with(click, inventory_page):
+        page_items = inventory_page.get_items()
+        for idx, item in enumerate(page_items):
+            details_page = click(item)
+            assert details_page.get_item() == item
+            details_page.back_to_products()

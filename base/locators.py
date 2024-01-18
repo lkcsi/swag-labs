@@ -34,7 +34,7 @@ class CartPageLocators(object):
 class HeaderLocators(object):
     CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
     CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
-    SEC_SECONDARY_CONTAINER = (By.CLASS_NAME, "header_secondary_container")
+    SECONDARY_CONTAINER = (By.CLASS_NAME, "header_secondary_container")
     TITLE = (By.CLASS_NAME, "title")
     BURGER = (By.XPATH, "//button[@id='react-burger-menu-btn']")
     LOGOUT = (By.XPATH, "//a[@id='logout_sidebar_link']")
@@ -47,6 +47,7 @@ class DetailsPageLocators(object):
     ITEM_PRICE = (By.CLASS_NAME, "inventory_details_price")
     ITEM_IMG = (By.TAG_NAME, "img")
     ADD_BUTTON = (By.CLASS_NAME, "btn_inventory")
+    BACK = (By.XPATH, "//button[@data-test='back-to-products']")
 
 
 class CheckoutPageOneLocators(object):

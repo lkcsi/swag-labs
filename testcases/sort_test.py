@@ -1,45 +1,46 @@
-# import unittest
-# from parameterized import parameterized_class
-# from database.database import users
-# from pages.inventory_page import InventoryPage, SortBy
-# from base_test import BaseTestCase
-# from pages.element import ImageItem
-#
-#
-# @parameterized_class(users())
-# class SortTestCase(BaseTestCase):
-#     def test_order_az(self):
-#         self.order_by(SortBy.AZ, lambda x: x.title)
-#
-#     def test_order_price_low_to_high(self):
-#         self.order_by(SortBy.LOHI, lambda x: x.price)
-#
-#     def test_order_price_high_to_low(self):
-#         self.order_by(SortBy.HILO, lambda x: x.price, True)
-#
-#     def test_order_za(self):
-#         self.order_by(SortBy.ZA, lambda x: x.title, True)
-#
-#     def order_by(self, by: SortBy, by_func, reverse=False):
-#         self.login()
-#
-#         inventory_page = self.sauce_demo.inventory_page
-#         inventory_page.sort(by)
-#
-#         items_in_order = inventory_page.get_items()
-#         items_in_order.sort(key=by_func, reverse=reverse)
-#
-#         self.compare_order(items_in_order, inventory_page.get_items(), by_func)
-#
-#     def compare_order(
-#         self, expected_items: list[ImageItem], actual_items: list[ImageItem], by_func
-#     ):
-#         expected_items = [by_func(i) for i in expected_items]
-#         actual_items = [by_func(i) for i in actual_items]
-#
-#         self.logger.info(f"expected order: {expected_items} == actual: {actual_items}")
-#         self.assertEqual(expected_items, actual_items)
-#
-#
-# if __name__ == "__main__":
-#     unittest.main()
+import pytest
+from pages import SortBy
+from base import ImageItem
+from utilities import params_from_json as params
+
+
+class TestSort:
+
+    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    def test_order_az(self, username, password):
+        inventory_page = self.login_page.login(username, password)
+        self.order_by(inventory_page, SortBy.AZ, lambda x: x.title)
+
+    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    def test_order_price_low_to_high(self, username, password):
+        inventory_page = self.login_page.login(username, password)
+        self.order_by(inventory_page, SortBy.LOHI, lambda x: x.price)
+
+    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    def test_order_price_high_to_low(self, username, password):
+        inventory_page = self.login_page.login(username, password)
+        self.order_by(inventory_page, SortBy.HILO, lambda x: x.price, True)
+
+    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    def test_order_za(self, username, password):
+        inventory_page = self.login_page.login(username, password)
+        self.order_by(inventory_page, SortBy.ZA, lambda x: x.title, True)
+
+    def order_by(self, inventory_page, by: SortBy, by_func, reverse=False):
+        inventory_page.sort(by)
+
+        items_in_order = inventory_page.get_items()
+        items_in_order.sort(key=by_func, reverse=reverse)
+
+        self.compare_order(items_in_order, inventory_page.get_items(), by_func)
+
+    @staticmethod
+    def compare_order(expected_items: list[ImageItem], actual_items: list[ImageItem], by_func):
+        expected_items = [by_func(i) for i in expected_items]
+        actual_items = [by_func(i) for i in actual_items]
+
+        assert actual_items == expected_items
