@@ -3,11 +3,12 @@ import unittest
 from pages import LoginPage
 from base import Header
 from utilities import params_from_json as params
+from base_test import BaseTest
 
 
-class TestLogout:
+class TestLogout(BaseTest):
 
-    @pytest.mark.usefixtures("driver")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_logout(self, username, password):
         login = LoginPage(self.driver)
@@ -15,7 +16,3 @@ class TestLogout:
 
         header = Header(self.driver)
         header.logout()
-
-
-if __name__ == "__main__":
-    unittest.main()

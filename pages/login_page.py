@@ -1,6 +1,4 @@
-from base.element import *
-from base.locators import LoginPageLocators
-from base.base_page import BasePage
+from base import LoginPageLocators, BasePage, ValueElement, TextElement
 import pages
 from utilities import file_logger
 

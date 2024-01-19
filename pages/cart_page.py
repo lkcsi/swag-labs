@@ -1,9 +1,7 @@
-from base.locators import CartPageLocators
-from base.element import Item, BaseElement
+from base import Item, BaseElement, CartPageLocators
 from selenium.webdriver.common.by import By
 from utilities import file_logger
 import pages
-
 
 
 class SortBy:

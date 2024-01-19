@@ -6,8 +6,8 @@ This project is intended to test the following website: https://www.saucedemo.co
 - pip install selenium
 - pip install parameterized
 - pip install pytest
-- pip install softest
 - pip install pytest-html
+- pip install pytest-soft-assertions
 
 # Test run
 - Individual: pytest -k test_wrong_password_0

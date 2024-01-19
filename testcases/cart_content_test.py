@@ -1,30 +1,28 @@
-import unittest
 import pytest
 from utilities import params_from_json as params
+from base_test import BaseTest
 
 
-class TestCartContent:
+class TestCartContent(BaseTest):
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_cart_content_from_inventory(self, username, password):
         inventory_page = self.login_page.login(username, password)
-        inventory_items = inventory_page.get_items()
         items_to_buy = []
-        for idx, item in enumerate(inventory_items):
-            inventory_page.add_item(idx)
+        for item in inventory_page:
+            item.click_add()
             items_to_buy.append(item)
             cart_page = self.header.click_cart()
             self.check_content(items_to_buy, cart_page.get_items())
             cart_page.continue_shopping()
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_cart_content_from_details(self, username, password):
         inventory_page = self.login_page.login(username, password)
-        inventory_items = inventory_page.get_items()
         items_to_buy = []
-        for item in inventory_items:
+        for item in inventory_page:
             details_page = item.click_image()
             details_page.add_item()
             items_to_buy.append(item)
@@ -32,13 +30,13 @@ class TestCartContent:
             self.check_content(items_to_buy, cart_page.get_items())
             cart_page.continue_shopping()
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_cart_remove(self, username, password):
         inventory_page = self.login_page.login(username, password)
         items_to_buy = inventory_page.get_items()
         inventory_page.add_all_items()
-        cart_page = header.click_cart()
+        cart_page = self.header.click_cart()
         items_in_cart = cart_page.get_items()
 
         self.check_content(items_to_buy, items_in_cart)
@@ -51,7 +49,3 @@ class TestCartContent:
     @staticmethod
     def check_content(selected_items, cart_items):
         assert selected_items == cart_items, "cart content doesn't match selected items"
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -1,11 +1,12 @@
 import pytest
 from utilities import params_from_json as params
 from pages import CartPage, InventoryPage
+from base_test import BaseTest
 
 
-class TestCancelCheckout:
+class TestCancelCheckout(BaseTest):
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_cancel_checkout_one(self, username, password):
         inventory_page = self.login_page.login(username, password)
@@ -17,7 +18,7 @@ class TestCancelCheckout:
 
         assert CartPage.TITLE == self.header.get_title(), "landed wrong page after cancel checkout"
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_cancel_checkout_two(self, username, password):
         inventory_page = self.login_page.login(username, password)

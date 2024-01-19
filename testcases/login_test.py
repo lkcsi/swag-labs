@@ -1,18 +1,19 @@
 from pages import InventoryPage
+from base_test import BaseTest
 import pytest
 from utilities import params_from_json as params
 
 
-class TestValidParameters:
-    @pytest.mark.usefixtures("setup", "login_page", "header")
+class TestValidParameters(BaseTest):
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_login_with_valid_credentials(self, username, password):
         self.login_page.login(username, password)
         assert InventoryPage.TITLE == self.header.get_title()
 
 
-class TestWrongParameters:
-    @pytest.mark.usefixtures("setup", "login_page")
+class TestWrongParameters(BaseTest):
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/invalid_credentials.json"))
     def test_wrong_password(self, username, password):
         self.login_page.login(username, password)
@@ -23,8 +24,8 @@ class TestWrongParameters:
         )
 
 
-class TestMissingParameters:
-    @pytest.mark.usefixtures("setup", "login_page")
+class TestMissingParameters(BaseTest):
+    @pytest.mark.usefixtures("setup")
     def test_username_is_required(self):
         self.login_page.login("", "secret_sauce")
 

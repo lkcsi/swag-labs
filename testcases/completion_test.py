@@ -1,11 +1,13 @@
 import pytest
+
+from base_test import BaseTest
 from utilities import params_from_json as params
 from pages import InventoryPage
 
 
-class TestCompletion:
+class TestCompletion(BaseTest):
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_completion(self, username, password):
         inventory_page = self.login_page.login(username, password)

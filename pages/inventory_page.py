@@ -1,6 +1,5 @@
-from base.locators import InventoryPageLocators, ItemLocators
 from selenium.webdriver.support.ui import WebDriverWait
-from base.element import ImageItem
+from base import ImageItem, InventoryPageLocators, ItemLocators
 from selenium.webdriver.common.by import By
 from utilities import file_logger
 import pages
@@ -66,6 +65,10 @@ class InventoryPage:
 
     def __init__(self, driver):
         self.driver = driver
+
+    def __getitem__(self, key):
+        elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[key]
+        return InventoryItem(self.driver, elem)
 
     def get_items(self) -> list[InventoryItem]:
         driver = self.driver

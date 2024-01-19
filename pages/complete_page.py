@@ -1,6 +1,4 @@
-from base.locators import CompletePageLocators
-from base.element import BaseElement
-from base.base_page import BasePage
+from base import CompletePageLocators, BasePage, BaseElement
 from utilities import file_logger
 
 

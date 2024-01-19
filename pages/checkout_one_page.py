@@ -1,6 +1,4 @@
-from base.locators import CheckoutPageOneLocators
-from base.element import ValueElement, BaseElement, TextElement
-from base.base_page import BasePage
+from base import CheckoutPageOneLocators, ValueElement, BaseElement, TextElement, BasePage
 from utilities import file_logger
 import pages
 

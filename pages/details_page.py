@@ -1,5 +1,4 @@
-from base.locators import DetailsPageLocators
-from base.element import ImageItem, BaseElement
+from base import DetailsPageLocators, ImageItem, BaseElement
 from utilities import file_logger
 
 

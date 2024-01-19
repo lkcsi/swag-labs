@@ -1,5 +1,4 @@
-from base.locators import ItemLocators, CheckoutPageTwoLocators
-from base.element import QuantityItem, TextElement, BaseElement
+from base import ItemLocators, CheckoutPageTwoLocators, QuantityItem, TextElement, BaseElement
 from utilities import file_logger
 import pages
 

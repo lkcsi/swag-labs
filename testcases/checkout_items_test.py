@@ -1,11 +1,11 @@
-import unittest
 import pytest
 from utilities import params_from_json as params
+from base_test import BaseTest
 
 
-class TestCheckoutItems:
+class TestCheckoutItems(BaseTest):
 
-    @pytest.mark.usefixtures("driver", "login_page", "header")
+    @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
     def test_overview_items(self, username, password):
         inventory_page = self.login_page.login(username, password)
