@@ -1,6 +1,6 @@
 import pytest
 
-from base_test import BaseTest
+from base import BaseTest
 from utilities import params_from_json as params
 from pages import InventoryPage
 
@@ -8,7 +8,7 @@ from pages import InventoryPage
 class TestCompletion(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_completion(self, username, password):
         inventory_page = self.login_page.login(username, password)
         inventory_page.add_all_items()

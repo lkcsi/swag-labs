@@ -1,29 +1,28 @@
 import pytest
 from pages import SortBy
-from base import ImageItem
+from base import ImageItem, BaseTest
 from utilities import params_from_json as params
-from base_test import BaseTest
 
 
 class TestSort(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_order_az(self, username, password):
         self.order_by(username, password, SortBy.AZ, lambda x: x.title)
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_order_price_low_to_high(self, username, password):
         self.order_by(username, password, SortBy.LOHI, lambda x: x.price)
 
     @pytest.mark.usefixtures("driver", "login_page", "header")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_order_price_high_to_low(self, username, password):
         self.order_by(username, password, SortBy.HILO, lambda x: x.price, True)
 
     @pytest.mark.usefixtures("setup", "login_page", "header")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_order_za(self, username, password):
         self.order_by(username, password, SortBy.ZA, lambda x: x.title, True)
 

@@ -1,12 +1,12 @@
 import pytest
 from utilities import params_from_json as params
-from base_test import BaseTest
+from base import BaseTest
 
 
 class TestCartContent(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_cart_content_from_inventory(self, username, password):
         inventory_page = self.login_page.login(username, password)
         items_to_buy = []
@@ -18,7 +18,7 @@ class TestCartContent(BaseTest):
             cart_page.continue_shopping()
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_cart_content_from_details(self, username, password):
         inventory_page = self.login_page.login(username, password)
         items_to_buy = []
@@ -31,7 +31,7 @@ class TestCartContent(BaseTest):
             cart_page.continue_shopping()
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_cart_remove(self, username, password):
         inventory_page = self.login_page.login(username, password)
         items_to_buy = inventory_page.get_items()

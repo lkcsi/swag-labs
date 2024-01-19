@@ -1,6 +1,6 @@
 import pytest
 
-from base_test import BaseTest
+from base import BaseTest
 from utilities import params_from_json as params
 from utilities import convert_price_tag_to_float as convert_to_float
 from utilities import sum_price_of_items as price_sum
@@ -11,7 +11,7 @@ TAX = 1.08
 class TestCheckoutTotals(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_checkout_totals(self, username, password):
         inventory_page = self.login_page.login(username, password)
         inventory_page.add_all_items()

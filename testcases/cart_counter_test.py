@@ -1,12 +1,12 @@
 import pytest
 from utilities import params_from_json as params
-from base_test import BaseTest
+from base import BaseTest
 
 
 class TestCartCounter(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_cart_counter_from_details(self, username, password):
         expected = 0
 
@@ -31,7 +31,7 @@ class TestCartCounter(BaseTest):
         assert expected == self.header.cart.counter(), "cart counter is not correct according to the selected items"
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     def test_cart_counter_from_inventory(self, username, password):
         expected = 0
 

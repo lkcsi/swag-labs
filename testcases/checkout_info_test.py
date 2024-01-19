@@ -2,14 +2,14 @@ import pytest
 
 from pages import CheckoutTwoPage, CheckoutOnePage
 from utilities import params_from_json as params
-from base_test import BaseTest
+from base import BaseTest
 
 
 class TestCheckoutInfo(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
-    @pytest.mark.parametrize("first_name,last_name,postal_code", params("../testdata/valid_checkout_info.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("first_name,last_name,postal_code", params("testdata/valid_checkout_info.json"))
     def test_with_valid_info(self, username, password, first_name, last_name, postal_code):
         inventory_page = self.login_page.login(username, password)
         inventory_page.add_all_items()
@@ -19,9 +19,9 @@ class TestCheckoutInfo(BaseTest):
         self.check_success(checkout_one_page)
 
     @pytest.mark.usefixtures("driver", "login_page", "header")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     @pytest.mark.parametrize("first_name,last_name,postal_code, missing_field",
-                             params("../testdata/missing_checkout_info.json"))
+                             params("testdata/missing_checkout_info.json"))
     def test_missing_input(self, username, password, first_name, last_name, postal_code, missing_field):
         inventory_page = self.login_page.login(username, password)
         inventory_page.add_all_items()
@@ -32,9 +32,9 @@ class TestCheckoutInfo(BaseTest):
 
     @pytest.mark.xfail("there is no such requirement to check invalid characters yet")
     @pytest.mark.usefixtures("driver", "login_page", "header")
-    @pytest.mark.parametrize("username,password", params("../testdata/valid_credentials.json"))
+    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
     @pytest.mark.parametrize("first_name,last_name,postal_code,invalid_field",
-                             params("../testdata/invalid_checkout_info.json"))
+                             params("testdata/invalid_checkout_info.json"))
     def test_invalid_input(self, username, password, first_name, last_name, postal_code, invalid_field):
         inventory_page = self.login_page.login(username, password)
         inventory_page.add_all_items()
