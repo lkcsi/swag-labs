@@ -7,6 +7,7 @@ import pytest
 import pytest_html
 from pytest_html import extras
 import uuid
+from utilities import compare_images
 
 PAGE_URL = "https://www.saucedemo.com"
 
@@ -18,6 +19,7 @@ def setup(request, browser):
     else:
         driver = webdriver.Chrome()
     driver.get(PAGE_URL)
+    driver.fullscreen_window()
     driver.implicitly_wait(0.5)
     request.cls.driver = driver
     request.cls.login_page = LoginPage(driver)
@@ -46,13 +48,22 @@ def pytest_runtest_makereport(item, call):
         xfail = hasattr(report, "wasxfail")
         html_path = item.config.option.htmlpath
         if (report.skipped and xfail) or (report.failed and not xfail) and html_path:
-            file_path = os.path.join("screenshots", str(uuid.uuid4())+".png")
-            driver.save_screenshot(file_path)
+            file_path = os.path.join("screenshots", f"{str(uuid.uuid4())}.png")
+            if marker := get_marker(item.own_markers, "visualtest"):
+                os.rename(f"screenshots/{marker.args[0]}.png", file_path)
+            else:
+                driver.save_screenshot(file_path)
             html = (f"<div><img src='../{file_path}' alt='screenshot' style='width:300px;height:200px'"
                     "onclick='window.open(this.src)' align='right'/><div>")
             extra_html.append(pytest_html.extras.html(html))
         report.extras = extra_html
 
+
+def get_marker(markers, name):
+    for marker in markers:
+        if marker.name == name:
+            return marker
+    return None
 
 def pytest_html_report_title(report):
     report.title = "My Title"
