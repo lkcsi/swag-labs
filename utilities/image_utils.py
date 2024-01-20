@@ -1,4 +1,6 @@
 from PIL import Image, ImageDraw
+import os
+import uuid
 
 
 def compare_images(img_1: str, img_2: str, file_name: str) -> bool:
@@ -35,3 +37,33 @@ def __get_region(image, x, y, width, height):
             region_total += sum(pixel) / 4
 
     return region_total / factor
+
+
+def save_image(item):
+    driver = item.cls.driver
+    file_path = os.path.join("screenshots", f"{str(uuid.uuid4())}.png")
+    if is_visual_test(item):
+        file_path = save_compare_result(item, file_path)
+    else:
+        driver.save_screenshot(file_path)
+    return (f"<div><img src='../{file_path}' alt='screenshot' style='width:300px;height:200px'"
+            "onclick='window.open(this.src)' align='right'/><div>")
+
+
+def is_visual_test(item):
+    for marker in item.own_markers:
+        if marker.name == 'visualtest':
+            return True
+
+
+def save_compare_result(item, file_path):
+    file_name = ""
+    for marker in item.own_markers:
+        if marker.name == 'visualtest':
+            file_name = marker.args[0]
+
+    compare_result = f"screenshots/{file_name}.png"
+    if os.path.exists(compare_result):
+        os.rename(compare_result, file_path)
+        return file_path
+    return ""

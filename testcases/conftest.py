@@ -4,10 +4,11 @@ from selenium import webdriver
 from pages import LoginPage
 from base import Header
 import pytest
+import os
+import uuid
 import pytest_html
 from pytest_html import extras
-import uuid
-from utilities import compare_images
+from utilities import save_image
 
 PAGE_URL = "https://www.saucedemo.com"
 
@@ -42,28 +43,18 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     extra_html = getattr(report, "extras", [])
-    driver = item.cls.driver
+
     if report.when == "call":
-        extra_html.append(pytest_html.extras.url(PAGE_URL))
+        page_url = pytest_html.extras.url(PAGE_URL)
+        extra_html.append(page_url)
+
         xfail = hasattr(report, "wasxfail")
-        html_path = item.config.option.htmlpath
-        if (report.skipped and xfail) or (report.failed and not xfail) and html_path:
-            file_path = os.path.join("screenshots", f"{str(uuid.uuid4())}.png")
-            if marker := get_marker(item.own_markers, "visualtest"):
-                os.rename(f"screenshots/{marker.args[0]}.png", file_path)
-            else:
-                driver.save_screenshot(file_path)
-            html = (f"<div><img src='../{file_path}' alt='screenshot' style='width:300px;height:200px'"
-                    "onclick='window.open(this.src)' align='right'/><div>")
-            extra_html.append(pytest_html.extras.html(html))
+        if (report.skipped and xfail) or (report.failed and not xfail) and item.config.option.htmlpath:
+            image = pytest_html.extras.html(save_image(item))
+            extra_html.append(image)
+
         report.extras = extra_html
 
-
-def get_marker(markers, name):
-    for marker in markers:
-        if marker.name == name:
-            return marker
-    return None
 
 def pytest_html_report_title(report):
     report.title = "My Title"
