@@ -1,5 +1,6 @@
 from base.locators import HeaderLocators
 from utilities import file_logger
+from selenium.common.exceptions import NoSuchElementException
 import pages
 
 
@@ -40,15 +41,17 @@ class Header(object):
         self.cart = Cart(driver)
 
     def get_title(self):
-        container = self.driver.find_element(*HeaderLocators.SECONDARY_CONTAINER)
-        header = container.find_element(*HeaderLocators.TITLE)
-        return header.text
+        try:
+            container = self.driver.find_element(*HeaderLocators.SECONDARY_CONTAINER)
+            header = container.find_element(*HeaderLocators.TITLE)
+            return header.text
+        except NoSuchElementException:
+            return ""
 
     def click_cart(self):
         self.logger.info("click cart icon")
         self.cart.click()
         return pages.CartPage(self.driver)
-
 
     def logout(self):
         self.logger.info("click burger menu")

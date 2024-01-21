@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from base import ImageItem, InventoryPageLocators, ItemLocators
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from utilities import file_logger
 import pages
@@ -49,6 +50,13 @@ class InventoryItem(ImageItem):
         button = self.driver.find_element(*self.add_button_locator)
         button.click()
 
+    def added(self):
+        try:
+            self.driver.find_element(*self.remove_button_locator)
+            return True
+        except NoSuchElementException:
+            return False
+
     def click_remove(self):
         self.logger.info(f"remove {self.title} from cart")
         button = self.driver.find_element(*self.remove_button_locator)
@@ -65,19 +73,22 @@ class InventoryPage:
 
     def __init__(self, driver):
         self.driver = driver
+        elements = driver.find_elements(*InventoryPageLocators.ITEM)
+        self.items = [InventoryItem(driver, elem) for elem in elements]
 
     def __getitem__(self, key):
         elem = self.driver.find_elements(*InventoryPageLocators.ITEM)[key]
         return InventoryItem(self.driver, elem)
 
     def get_items(self) -> list[InventoryItem]:
-        driver = self.driver
-        elements = driver.find_elements(*InventoryPageLocators.ITEM)
-        return [InventoryItem(driver, elem) for elem in elements]
+        return self.items
 
     def add_item(self, key):
         element = self.driver.find_elements(*InventoryPageLocators.ITEM)[key]
         InventoryItem(self.driver, element).click_add()
+
+    def get_selected_items(self):
+        return [i for i in self.get_items() if i.added()]
 
     def add_all_items(self):
         for element in self.driver.find_elements(*InventoryPageLocators.ITEM):

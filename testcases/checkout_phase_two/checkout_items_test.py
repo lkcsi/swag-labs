@@ -6,9 +6,8 @@ from base import BaseTest
 class TestCheckoutItems(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
-    def test_overview_items(self, username, password):
-        inventory_page = self.login_page.login(username, password)
+    def test_overview_items(self):
+        inventory_page = self.login()
         inventory_page.add_all_items()
 
         items_to_buy = inventory_page.get_items()

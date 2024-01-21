@@ -11,9 +11,8 @@ TAX = 1.08
 class TestCheckoutTotals(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
-    def test_checkout_totals(self, username, password):
-        inventory_page = self.login_page.login(username, password)
+    def test_checkout_totals(self):
+        inventory_page = self.login()
         inventory_page.add_all_items()
         items_to_buy = inventory_page.get_items()
 

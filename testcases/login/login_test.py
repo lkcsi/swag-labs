@@ -6,25 +6,19 @@ from utilities import params_from_json as params
 
 class TestValidParameters(BaseTest):
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
-    def test_login_with_valid_credentials(self, username, password):
-        self.login_page.login(username, password)
+    def test_login_with_valid_credentials(self):
+        self.login()
         assert InventoryPage.TITLE == self.header.get_title()
 
-
-class TestWrongParameters(BaseTest):
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("testdata/invalid_credentials.json"))
-    def test_wrong_password(self, username, password):
-        self.login_page.login(username, password)
+    def test_wrong_password(self):
+        self.login()
 
         assert (
-            "Username and password do not match any user in this service"
-            in self.login_page.error_text
+                "Username and password do not match any user in this service"
+                in self.login_page.error_text
         )
 
-
-class TestMissingParameters(BaseTest):
     @pytest.mark.usefixtures("setup")
     def test_username_is_required(self):
         self.login_page.login("", "secret_sauce")

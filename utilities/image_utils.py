@@ -42,27 +42,22 @@ def __get_region(image, x, y, width, height):
 def save_image(item):
     driver = item.cls.driver
     file_path = os.path.join("screenshots", f"{str(uuid.uuid4())}.png")
-    if is_visual_test(item):
-        file_path = save_compare_result(item, file_path)
+    if result := visual_test(item):
+        file_path = save_compare_result(result, file_path)
     else:
         driver.save_screenshot(file_path)
     return (f"<div><img src='../{file_path}' alt='screenshot' style='width:300px;height:200px'"
             "onclick='window.open(this.src)' align='right'/><div>")
 
 
-def is_visual_test(item):
+def visual_test(item):
     for marker in item.own_markers:
         if marker.name == 'visualtest':
-            return True
+            return marker.args[0]
 
 
-def save_compare_result(item, file_path):
-    file_name = ""
-    for marker in item.own_markers:
-        if marker.name == 'visualtest':
-            file_name = marker.args[0]
-
-    compare_result = f"screenshots/{file_name}.png"
+def save_compare_result(result, file_path):
+    compare_result = f"screenshots/{result}.png"
     if os.path.exists(compare_result):
         os.rename(compare_result, file_path)
         return file_path

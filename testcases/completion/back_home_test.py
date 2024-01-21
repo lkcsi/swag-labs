@@ -8,9 +8,8 @@ from pages import InventoryPage
 class TestCompletion(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    @pytest.mark.parametrize("username,password", params("testdata/valid_credentials.json"))
-    def test_completion(self, username, password):
-        inventory_page = self.login_page.login(username, password)
+    def test_back_home(self):
+        inventory_page = self.login()
         inventory_page.add_all_items()
 
         cart_page = self.header.click_cart()
