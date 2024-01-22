@@ -18,6 +18,7 @@ def file_logger(log_level=logging.INFO):
 
     return logger
 
+
 def params_from_json(filename):
     with open(filename, "r") as fh:
         result = []

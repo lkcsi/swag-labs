@@ -2,11 +2,13 @@ from PIL import Image, ImageDraw
 import os
 import uuid
 
+SCREENSHOTS_PATH = "screenshots"
+
 
 def compare_images(img_1: str, img_2: str, file_name: str) -> bool:
     result = True
-    img_correct = Image.open(f"screenshots/{img_1}.png")
-    img_tested = Image.open(f"screenshots/{img_2}.png")
+    img_correct = Image.open(os.path.join(SCREENSHOTS_PATH, f"{img_1}.png"))
+    img_tested = Image.open(os.path.join(SCREENSHOTS_PATH, f"{img_2}.png"))
     columns, rows = 60, 80
 
     img_width, img_height = img_tested.size
@@ -24,7 +26,7 @@ def compare_images(img_1: str, img_2: str, file_name: str) -> bool:
                 draw.rectangle((x, y, x + block_width, y + block_height), outline="red")
                 result = False
 
-    img_tested.save(f"screenshots/{file_name}.png")
+    img_tested.save(os.path.join(SCREENSHOTS_PATH, f"{file_name}.png"))
     return result
 
 
@@ -41,29 +43,28 @@ def __get_region(image, x, y, width, height):
 
 def save_image(item):
     driver = item.cls.driver
-    file_path = os.path.join("screenshots", f"{str(uuid.uuid4())}.png")
-    if is_visual_test(item):
-        file_path = save_compare_result(item, file_path)
+    file_path = os.path.join(SCREENSHOTS_PATH, f"{str(uuid.uuid4())}.png")
+    visual_test_marker, result = get_visual_test_marker(item)
+    if visual_test_marker and file_exists(result):
+        save_compare_result(result, file_path)
     else:
         driver.save_screenshot(file_path)
     return (f"<div><img src='../{file_path}' alt='screenshot' style='width:300px;height:200px'"
             "onclick='window.open(this.src)' align='right'/><div>")
 
 
-def is_visual_test(item):
+def get_visual_test_marker(item):
     for marker in item.own_markers:
-        if marker.name == 'visualtest':
-            return True
+        if marker.name == "visualtest":
+            return True, marker.args[0]
+    return False, ""
 
 
-def save_compare_result(item, file_path):
-    file_name = ""
-    for marker in item.own_markers:
-        if marker.name == 'visualtest':
-            file_name = marker.args[0]
+def file_exists(compare_file):
+    file_path = os.path.join(SCREENSHOTS_PATH, f"{compare_file}.png")
+    return os.path.exists(file_path)
 
-    compare_result = f"screenshots/{file_name}.png"
-    if os.path.exists(compare_result):
-        os.rename(compare_result, file_path)
-        return file_path
-    return ""
+
+def save_compare_result(result, file_path):
+    compare_result = os.path.join(SCREENSHOTS_PATH, f"{result}.png")
+    os.rename(compare_result, file_path)
