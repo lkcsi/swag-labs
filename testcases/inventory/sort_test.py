@@ -27,9 +27,19 @@ class TestSort(BaseTest):
         items_in_order = inventory_page.get_items()
 
         inventory_page.sort(by)
+        self.handle_alert()
         items_in_order.sort(key=field, reverse=reverse)
 
         self.compare_order(items_in_order, inventory_page.get_items(), field)
+
+    def handle_alert(self):
+        alert_message = ""
+        alert = self.driver.switch_to.alert
+        if alert:
+            alert_message = alert.text
+            alert.accept()
+
+        assert alert_message == ""
 
     @staticmethod
     def compare_order(expected_items: list[ImageItem], actual_items: list[ImageItem], by_func):

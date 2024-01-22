@@ -8,27 +8,33 @@ from utilities import save_image
 from dotenv import load_dotenv
 import os
 
+
 @pytest.fixture(scope="function")
 def setup(request, browser, sauce_user):
 
     load_dotenv()
-    request.cls.password = os.getenv("PASSWORD")
-    username = os.getenv("SAUCE_USER")
-    if sauce_user:
-        username = sauce_user
     url = os.getenv("BASE_URL")
 
     driver = get_driver(browser)
     driver.get(url)
     driver.fullscreen_window()
     driver.implicitly_wait(0.5)
+
     request.cls.driver = driver
     request.cls.login_page = LoginPage(driver)
     request.cls.header = Header(driver)
     request.cls.base_url = url
-    request.cls.username = username
+    request.cls.username = get_username(sauce_user)
+    request.cls.password = os.getenv("PASSWORD")
     yield
     driver.close()
+
+
+def get_username(sauce_user):
+    if sauce_user:
+        return sauce_user
+    else:
+        return os.getenv("SAUCE_USER")
 
 
 def get_driver(browser):
@@ -36,6 +42,7 @@ def get_driver(browser):
         return webdriver.Firefox()
     else:
         return webdriver.Chrome()
+
 
 def pytest_addoption(parser):
     parser.addoption("--browser")

@@ -8,6 +8,7 @@ This project is intended to test the following website: https://www.saucedemo.co
 - pip install pytest
 - pip install pytest-html
 - pip install pytest-soft-assertions
+- pip python dotenv
 
 # Test run
 - Individual: pytest -k test_wrong_password_0
