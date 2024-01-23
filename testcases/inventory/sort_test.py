@@ -1,8 +1,7 @@
 import pytest
 from pages import SortBy
 from base import ImageItem, BaseTest
-from utilities import params_from_json as params
-
+from selenium.common.exceptions import NoAlertPresentException
 
 class TestSort(BaseTest):
 
@@ -33,11 +32,12 @@ class TestSort(BaseTest):
         self.compare_order(items_in_order, inventory_page.get_items(), field)
 
     def handle_alert(self):
-        alert_message = ""
-        alert = self.driver.switch_to.alert
-        if alert:
+        try:
+            alert = self.driver.switch_to.alert
             alert_message = alert.text
             alert.accept()
+        except NoAlertPresentException:
+            alert_message = ""
 
         assert alert_message == ""
 

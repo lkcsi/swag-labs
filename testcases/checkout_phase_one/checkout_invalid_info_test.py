@@ -12,10 +12,7 @@ class TestCheckoutInvalidInfo(BaseTest):
     @pytest.mark.parametrize("first_name,last_name,postal_code,invalid_field",
                              params("testdata/invalid_checkout_info.json"))
     def test_invalid_input(self, first_name, last_name, postal_code, invalid_field):
-        inventory_page = self.login()
-        inventory_page.add_all_items()
-        cart_page = self.header.click_cart()
-        checkout_one_page = cart_page.checkout()
+        checkout_one_page = self.go_to_checkout_one(add_all=True)
         checkout_one_page.fill_and_continue(first_name, last_name, postal_code)
 
         assert checkout_one_page.error_text != "", "no error message when using invalid inputs"

@@ -9,13 +9,7 @@ class TestCompletion(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     def test_back_home(self):
-        inventory_page = self.login()
-        inventory_page.add_all_items()
-
-        cart_page = self.header.click_cart()
-        checkout_one = cart_page.checkout()
-        checkout_two = checkout_one.fill_and_continue()
-        complete_page = checkout_two.finish()
+        complete_page = self.go_to_finish(add_all=True)
         complete_page.back_to_home()
 
         assert InventoryPage.TITLE == self.header.get_title(), "landed wrong page after completion"

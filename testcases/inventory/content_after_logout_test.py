@@ -12,5 +12,5 @@ class TestContentAfterLogout(BaseTest):
         self.logout()
 
         inventory = self.go_to_inventory()
-        assert inventory.get_items == expected_items
+        assert inventory.get_items() == expected_items
 

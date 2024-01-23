@@ -13,7 +13,7 @@ class TestVisual(BaseTest):
     @pytest.mark.visualtest(RESULT)
     @pytest.mark.usefixtures("setup")
     def test_inventory_visual(self):
-        self.perform(lambda: self.go_to_inventory(add_all=True))
+        self.perform(lambda: self.go_to_inventory(True))
 
     @pytest.mark.visualtest(RESULT)
     @pytest.mark.usefixtures("setup")
@@ -23,22 +23,22 @@ class TestVisual(BaseTest):
     @pytest.mark.visualtest(RESULT)
     @pytest.mark.usefixtures("setup")
     def test_cart_visual(self):
-        self.perform(lambda: self.go_to_cart(0, 1, 2))
+        self.perform(lambda: self.go_to_cart(False, 0, 1, 2))
 
     @pytest.mark.visualtest(RESULT)
     @pytest.mark.usefixtures("setup")
     def test_checkout_one_visual(self):
-        self.perform(lambda: self.go_to_checkout_one(0, 1, 2))
+        self.perform(lambda: self.go_to_checkout_one(False, 0, 1, 2))
 
     @pytest.mark.visualtest(RESULT)
     @pytest.mark.usefixtures("setup")
     def test_checkout_two_visual(self):
-        self.perform(lambda: self.go_to_checkout_two(0, 1, 2))
+        self.perform(lambda: self.go_to_checkout_two(False, 0, 1, 2))
 
     @pytest.mark.visualtest(RESULT)
     @pytest.mark.usefixtures("setup")
     def test_finish_visual(self):
-        self.perform(lambda: self.go_to_finish(add_all=True))
+        self.perform(lambda: self.go_to_finish(True))
 
     @staticmethod
     def compare():

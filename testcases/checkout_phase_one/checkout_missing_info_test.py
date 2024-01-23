@@ -11,10 +11,7 @@ class TestCheckoutMissingInfo(BaseTest):
     @pytest.mark.parametrize("first_name,last_name,postal_code, missing_field",
                              params("testdata/missing_checkout_info.json"))
     def test_missing_input(self, first_name, last_name, postal_code, missing_field):
-        inventory_page = self.login()
-        inventory_page.add_all_items()
-        cart_page = self.header.click_cart()
-        checkout_one_page = cart_page.checkout()
+        checkout_one_page = self.go_to_checkout_one(add_all=True)
         checkout_one_page.fill_and_continue(first_name, last_name, postal_code)
 
         assert f"{missing_field} is required" in checkout_one_page.error_text
