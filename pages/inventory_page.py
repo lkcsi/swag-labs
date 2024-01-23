@@ -2,8 +2,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from base import ImageItem, InventoryPageLocators, ItemLocators
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from utilities import file_logger
 import pages
+import logging
 
 
 class SortBy:
@@ -14,10 +14,10 @@ class SortBy:
 
 
 class InventoryItem(ImageItem):
-    logger = file_logger()
     image_locator = InventoryPageLocators.ITEM_IMG
 
     def __init__(self, driver, elem):
+        self.logger = logging.getLogger(InventoryItem.__name__)
         super().__init__(elem)
         self.driver = driver
 

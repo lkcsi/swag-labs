@@ -1,6 +1,7 @@
+import logging
+
 from base import LoginPageLocators, BasePage, ValueElement, TextElement
 import pages
-from utilities import file_logger
 
 
 class UsernameElement(ValueElement):
@@ -16,11 +17,14 @@ class LoginErrorElement(TextElement):
 
 
 class LoginPage(BasePage):
-    logger = file_logger()
 
     username_input = UsernameElement()
     password_input = PasswordElement()
     error_text = LoginErrorElement()
+
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.logger = logging.getLogger(LoginPage.__name__)
 
     def click_submit(self):
         self.logger.info("click submit button")

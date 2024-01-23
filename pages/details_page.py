@@ -1,10 +1,10 @@
+import logging
+
 from base import DetailsPageLocators, ImageItem, BaseElement
-from utilities import file_logger
 
 
 class DetailsItem(ImageItem):
 
-    logger = file_logger()
     title_locator = DetailsPageLocators.ITEM_TITLE
     desc_locator = DetailsPageLocators.ITEM_DESC
     price_locator = DetailsPageLocators.ITEM_PRICE
@@ -14,6 +14,7 @@ class DetailsItem(ImageItem):
         self.driver = driver
         container = self.driver.find_element(*DetailsPageLocators.CONTAINER)
         super().__init__(container)
+        self.logger = logging.getLogger(DetailsItem.__name__)
 
     def click_add(self):
         self.logger.info(f"from details page, add item {self.title} to cart")
@@ -33,11 +34,11 @@ class BackButton(BaseElement):
 
 
 class DetailsPage(object):
-    logger = file_logger()
     back = BackButton()
 
     def __init__(self, driver):
         self.driver = driver
+        self.logger = logging.getLogger(DetailsPage.__name__)
 
     def get_item(self):
         return DetailsItem(self.driver)

@@ -1,6 +1,6 @@
 from base import ItemLocators, CheckoutPageTwoLocators, QuantityItem, TextElement, BaseElement
-from utilities import file_logger
 import pages
+import logging
 
 
 class OverviewItem(QuantityItem):
@@ -40,10 +40,10 @@ class CheckoutTwoPage:
     subtotal = Subtotal()
     finish_button = FinishButton()
     cancel_button = CancelButton()
-    logger = file_logger()
 
     def __init__(self, driver):
         self.driver = driver
+        self.logger = logging.getLogger(CheckoutTwoPage.__name__)
 
     def finish(self):
         self.logger.info("click finish button")

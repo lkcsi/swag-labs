@@ -1,6 +1,6 @@
 from base import Item, BaseElement, CartPageLocators
 from selenium.webdriver.common.by import By
-from utilities import file_logger
+import logging
 import pages
 
 
@@ -41,13 +41,13 @@ class ContinueButton(BaseElement):
 
 
 class CartPage:
-    logger = file_logger()
     TITLE = "Your Cart"
     checkout_button = CheckoutButton()
     continue_button = ContinueButton()
 
     def __init__(self, driver):
         self.driver = driver
+        self.logger = logging.getLogger(CartPage.__name__)
 
     def continue_shopping(self):
         self.logger.info("click continue shopping button")

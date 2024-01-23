@@ -1,6 +1,6 @@
 from base import CheckoutPageOneLocators, ValueElement, BaseElement, TextElement, BasePage
-from utilities import file_logger
 import pages
+import logging
 
 
 class FirstName(ValueElement):
@@ -35,7 +35,10 @@ class CheckoutOnePage(BasePage):
     continue_button = ContinueButton()
     cancel_button = CancelButton()
     error_text = ErrorText()
-    logger = file_logger()
+
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.logger = logging.getLogger(CheckoutOnePage.__name__)
 
     def cancel(self):
         self.logger.info("click cancel checkout")
