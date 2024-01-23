@@ -7,56 +7,57 @@ from pytest_html import extras
 from utilities import save_image
 from dotenv import load_dotenv
 import os
+from configparser import ConfigParser
 
 
 @pytest.fixture(scope="function")
-def setup(request, browser, sauce_user):
+def setup(request, driver, conf):
 
     load_dotenv()
-    url = os.getenv("BASE_URL")
 
-    driver = get_driver(browser)
-    driver.get(url)
+    base_url = conf['BaseUrl']
+    driver.get(base_url)
     driver.fullscreen_window()
-    driver.implicitly_wait(0.5)
+    driver.implicitly_wait(float(conf['WaitTime']))
 
     request.cls.driver = driver
     request.cls.login_page = LoginPage(driver)
     request.cls.header = Header(driver)
-    request.cls.base_url = url
-    request.cls.username = get_username(sauce_user)
+    request.cls.base_url = base_url
+    request.cls.username = conf['Username']
     request.cls.password = os.getenv("PASSWORD")
     yield
     driver.close()
 
 
-def get_username(sauce_user):
-    if sauce_user:
-        return sauce_user
-    else:
-        return os.getenv("SAUCE_USER")
+@pytest.fixture()
+def correct_env(request, conf):
+    request.cls.correct_env_username = conf['CorrectEnvUsername']
+    request.cls.correct_env_base_url = conf['CorrectEnvBaseUrl']
 
 
-def get_driver(browser):
+def pytest_addoption(parser):
+    parser.addoption("--browser")
+    parser.addoption("--env")
+
+
+@pytest.fixture(scope="function", autouse=True)
+def driver(request):
+    browser = request.config.getoption("--browser")
     if browser == "firefox":
         return webdriver.Firefox()
     else:
         return webdriver.Chrome()
 
 
-def pytest_addoption(parser):
-    parser.addoption("--browser")
-    parser.addoption("--sauce-user")
-
-
 @pytest.fixture(scope="class", autouse=True)
-def browser(request):
-    return request.config.getoption("--browser")
-
-
-@pytest.fixture(scope="class", autouse=True)
-def sauce_user(request):
-    return request.config.getoption("--sauce-user")
+def conf(request):
+    env = request.config.getoption("--env")
+    if not env:
+        env = 'DEFAULT'
+    config = ConfigParser()
+    config.read('config.ini')
+    return config[env]
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -78,4 +79,4 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_html_report_title(report):
-    report.title = "My Title"
+    report.title = "SauceDemo Tests"

@@ -1,6 +1,7 @@
+import logging
+
 from base.locators import HeaderLocators
-from utilities import file_logger
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 import pages
 
 
@@ -28,17 +29,19 @@ class Cart(object):
 
     def click(self):
         cart = self.driver.find_element(*HeaderLocators.CART_LINK)
-        cart.click()
+        try:
+            cart.click()
+        except ElementClickInterceptedException:
+            self.driver.execute_script("arguments[0].click();", cart)
 
 
 class Header(object):
-
-    logger = file_logger()
 
     def __init__(self, driver):
         self.driver = driver
         self.burger = Burger(driver)
         self.cart = Cart(driver)
+        self.logger = logging.getLogger(Header.__name__)
 
     def get_title(self):
         try:

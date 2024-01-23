@@ -1,7 +1,5 @@
 import logging
-
 from base import CompletePageLocators, BasePage, BaseElement
-from utilities import file_logger
 
 
 class BackHomeButton(BaseElement):
