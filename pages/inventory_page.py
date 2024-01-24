@@ -32,9 +32,7 @@ class InventoryItem(ImageItem):
             title.find_element(By.XPATH, "..").get_attribute("id"),
         )
 
-        data_test = elem.find_element(*InventoryPageLocators.ADD_BUTTON).get_attribute(
-            "data-test"
-        )
+        data_test = elem.find_element(*InventoryPageLocators.ADD_BUTTON).get_attribute("data-test")
         self.add_button_locator = (By.XPATH, f"//button[@data-test='{data_test}']")
 
         data_test = data_test.replace("add-to-cart", "remove")
