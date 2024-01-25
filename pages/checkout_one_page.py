@@ -1,5 +1,9 @@
-from base import CheckoutPageOneLocators, ValueElement, BaseElement, TextElement, BasePage
-import pages
+from constants.locators import CheckoutPageOneLocators
+from .elements import ValueElement, BaseElement, TextElement
+from pages.base_page import BasePage
+from pages.cart_page import CartPage
+from pages.checkout_two_page import CheckoutTwoPage
+
 import logging
 
 
@@ -29,6 +33,7 @@ class ErrorText(TextElement):
 
 class CheckoutOnePage(BasePage):
     TITLE = "Checkout: Your Information"
+
     first_name = FirstName()
     last_name = LastName()
     postal_code = PostalCode()
@@ -36,15 +41,15 @@ class CheckoutOnePage(BasePage):
     cancel_button = CancelButton()
     error_text = ErrorText()
 
-    def __init__(self, driver):
-        super().__init__(driver)
+    def __init__(self, driver, wait):
+        super().__init__(driver, wait)
         self.logger = logging.getLogger(CheckoutOnePage.__name__)
 
     def cancel(self):
         self.logger.info("click cancel checkout")
         self.cancel_button.click()
 
-        return pages.CartPage(self.driver)
+        return CartPage(self.driver, self.wait)
 
     def fill_info(self, first_name, last_name, postal_code):
         self.logger.info(f"type First Name: {first_name}")
@@ -59,4 +64,4 @@ class CheckoutOnePage(BasePage):
         self.logger.info(f"click continue button")
         self.continue_button.click()
 
-        return pages.CheckoutTwoPage(self.driver)
+        return CheckoutTwoPage(self.driver, self.wait)

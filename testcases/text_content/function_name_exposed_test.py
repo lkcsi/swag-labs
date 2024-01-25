@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 import pytest
 import re
-from base import BaseTest
+from testcases import BaseTest
 
 
 class TestTextContent(BaseTest):

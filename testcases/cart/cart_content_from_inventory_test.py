@@ -1,6 +1,5 @@
 import pytest
-from utilities import params_from_json as params
-from base import BaseTest
+from testcases import BaseTest
 
 
 class TestCartContent(BaseTest):

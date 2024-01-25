@@ -1,7 +1,6 @@
 import pytest
 
-from base import BaseTest
-from utilities import params_from_json as params
+from testcases import BaseTest
 from utilities import convert_price_tag_to_float as convert_to_float
 from utilities import sum_price_of_items as price_sum
 

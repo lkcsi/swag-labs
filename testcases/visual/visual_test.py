@@ -1,4 +1,4 @@
-from base import BaseTest
+from testcases import BaseTest
 import pytest
 import os
 from utilities import compare_images

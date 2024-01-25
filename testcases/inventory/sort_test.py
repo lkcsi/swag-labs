@@ -1,7 +1,9 @@
 import pytest
 from pages import SortBy
-from base import ImageItem, BaseTest
+from testcases import BaseTest
+from pages.elements import Item
 from selenium.common.exceptions import NoAlertPresentException
+
 
 class TestSort(BaseTest):
 
@@ -42,7 +44,7 @@ class TestSort(BaseTest):
         assert alert_message == ""
 
     @staticmethod
-    def compare_order(expected_items: list[ImageItem], actual_items: list[ImageItem], by_func):
+    def compare_order(expected_items: list[Item], actual_items: list[Item], by_func):
         expected_items = [by_func(i) for i in expected_items]
         actual_items = [by_func(i) for i in actual_items]
 

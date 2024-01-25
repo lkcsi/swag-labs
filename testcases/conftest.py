@@ -1,6 +1,7 @@
 from selenium import webdriver
-from pages import LoginPage
-from base import Header
+from selenium.webdriver.support.wait import WebDriverWait
+
+from pages import LoginPage, Header
 import pytest
 import pytest_html
 from pytest_html import extras
@@ -12,19 +13,20 @@ from configparser import ConfigParser
 
 @pytest.fixture(scope="function")
 def setup(request, driver, conf):
-
     load_dotenv()
 
-    base_url = conf['BaseUrl']
+    base_url = conf["BaseUrl"]
     driver.get(base_url)
     driver.fullscreen_window()
-    driver.implicitly_wait(float(conf['WaitTime']))
+    # driver.implicitly_wait(float(conf['WaitTime']))
+    wait = WebDriverWait(driver, float(conf["WaitTime"]))
 
+    request.cls.wait = wait
     request.cls.driver = driver
-    request.cls.login_page = LoginPage(driver)
-    request.cls.header = Header(driver)
+    request.cls.login_page = LoginPage(driver, wait)
+    request.cls.header = Header(driver, wait)
     request.cls.base_url = base_url
-    request.cls.username = conf['Username']
+    request.cls.username = conf["Username"]
     request.cls.password = os.getenv("PASSWORD")
     yield
     driver.close()
@@ -32,8 +34,8 @@ def setup(request, driver, conf):
 
 @pytest.fixture()
 def correct_env(request, conf):
-    request.cls.correct_env_username = conf['CorrectEnvUsername']
-    request.cls.correct_env_base_url = conf['CorrectEnvBaseUrl']
+    request.cls.correct_env_username = conf["CorrectEnvUsername"]
+    request.cls.correct_env_base_url = conf["CorrectEnvBaseUrl"]
 
 
 def pytest_addoption(parser):
@@ -54,9 +56,9 @@ def driver(request):
 def conf(request):
     env = request.config.getoption("--env")
     if not env:
-        env = 'DEFAULT'
+        env = "DEFAULT"
     config = ConfigParser()
-    config.read('config.ini')
+    config.read("config.ini")
     return config[env]
 
 
@@ -71,7 +73,11 @@ def pytest_runtest_makereport(item, call):
         extra_html.append(page_url)
 
         xfail = hasattr(report, "wasxfail")
-        if (report.skipped and xfail) or (report.failed and not xfail) and item.config.option.htmlpath:
+        if (
+            (report.skipped and xfail)
+            or (report.failed and not xfail)
+            and item.config.option.htmlpath
+        ):
             image = pytest_html.extras.html(save_image(item))
             extra_html.append(image)
 

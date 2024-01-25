@@ -1,4 +1,4 @@
-from base import BaseTest
+from testcases import BaseTest
 import pytest
 from utilities import params_from_json as params
 

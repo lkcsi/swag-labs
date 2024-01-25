@@ -1,9 +1,9 @@
 import pytest
 from pages import CartPage, CheckoutOnePage
-from base import BaseTest
+from testcases import BaseTest
 
 
-class TestCancelCheckout(BaseTest):
+class TestCancelCheckoutOne(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     def test_cancel_checkout_phase_one(self):

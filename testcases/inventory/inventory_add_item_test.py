@@ -1,5 +1,5 @@
 import pytest
-from base import BaseTest
+from testcases import BaseTest
 
 
 class TestAddItem(BaseTest):

@@ -1,6 +1,6 @@
 import pytest
 from pages import InventoryPage, CheckoutTwoPage
-from base import BaseTest
+from testcases import BaseTest
 
 
 class TestCancelCheckout(BaseTest):

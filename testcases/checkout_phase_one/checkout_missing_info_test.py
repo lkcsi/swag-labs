@@ -2,7 +2,7 @@ import pytest
 
 from pages import CheckoutOnePage
 from utilities import params_from_json as params
-from base import BaseTest
+from testcases import BaseTest
 
 
 class TestCheckoutMissingInfo(BaseTest):

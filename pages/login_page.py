@@ -1,7 +1,11 @@
 import logging
 
-from base import LoginPageLocators, BasePage, ValueElement, TextElement
-import pages
+from pages.base_page import BasePage
+from pages.inventory_page import InventoryPage
+from constants.locators import LoginPageLocators, HeaderLocators
+from .elements import ValueElement, TextElement
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import TimeoutException
 
 
 class UsernameElement(ValueElement):
@@ -22,13 +26,13 @@ class LoginPage(BasePage):
     password_input = PasswordElement()
     error_text = LoginErrorElement()
 
-    def __init__(self, driver):
-        super().__init__(driver)
+    def __init__(self, driver, wait):
+        super().__init__(driver, wait)
         self.logger = logging.getLogger(LoginPage.__name__)
 
     def click_submit(self):
         self.logger.info("click submit button")
-        button = self.driver.find_element(*LoginPageLocators.SUBMIT)
+        button = self.wait.until(ec.presence_of_element_located(LoginPageLocators.SUBMIT))
         button.click()
 
     def login(self, username, password):
@@ -37,4 +41,8 @@ class LoginPage(BasePage):
         self.logger.info(f"type password: '{password}'")
         self.password_input = password
         self.click_submit()
-        return pages.InventoryPage(self.driver)
+        try:
+            self.wait.until(ec.presence_of_element_located(HeaderLocators.TITLE))
+        except TimeoutException:
+            return None
+        return InventoryPage(self.driver, self.wait)

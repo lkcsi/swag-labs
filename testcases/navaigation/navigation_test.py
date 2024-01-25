@@ -1,6 +1,6 @@
 import pytest
 from pages.inventory_page import InventoryPage
-from base import BaseTest
+from testcases import BaseTest
 from utilities import params_from_json as params
 
 

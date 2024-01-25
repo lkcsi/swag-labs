@@ -1,5 +1,5 @@
 import json
-from base.element import Item
+from pages.elements import Item
 
 
 def params_from_json(filename):

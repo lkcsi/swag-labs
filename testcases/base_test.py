@@ -1,4 +1,4 @@
-import pages
+from pages import InventoryPage, CartPage, CheckoutOnePage, CheckoutTwoPage, CompletePage
 
 
 class BaseTest:
@@ -14,7 +14,7 @@ class BaseTest:
 
     def go_to_inventory(self, add_all=False, *select_items):
         inventory = self.login()
-        self.check_title(pages.InventoryPage.TITLE)
+        self.check_title(InventoryPage.TITLE)
         if add_all:
             inventory.add_all_items()
             return inventory
@@ -30,25 +30,25 @@ class BaseTest:
     def go_to_cart(self, add_all=False, *select_items):
         self.go_to_inventory(add_all, *select_items)
         cart_page = self.header.click_cart()
-        self.check_title(pages.CartPage.TITLE)
+        self.check_title(CartPage.TITLE)
         return cart_page
 
     def go_to_checkout_one(self, add_all=False, *select_items):
         cart = self.go_to_cart(add_all, *select_items)
         checkout_one_page = cart.checkout()
-        self.check_title(pages.CheckoutOnePage.TITLE)
+        self.check_title(CheckoutOnePage.TITLE)
         return checkout_one_page
 
     def go_to_checkout_two(self, add_all=False, *select_items):
         checkout_one = self.go_to_checkout_one(add_all, *select_items)
         checkout_two_page = checkout_one.fill_and_continue()
-        self.check_title(pages.CheckoutTwoPage.TITLE)
+        self.check_title(CheckoutTwoPage.TITLE)
         return checkout_two_page
 
     def go_to_finish(self, add_all=False, *select_items):
         checkout_two = self.go_to_checkout_two(add_all, *select_items)
         complete_page = checkout_two.finish()
-        self.check_title(pages.CompletePage.TITLE)
+        self.check_title(CompletePage.TITLE)
         return complete_page
 
     def logout(self):
