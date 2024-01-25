@@ -7,6 +7,14 @@ from testcases import BaseTest
 
 class TestCheckoutInvalidInfo(BaseTest):
 
+    """
+    Steps:
+     * navigate to checkout one page
+     * fill shipping info with invalid values
+     * click Continue button
+     * check error message
+    """
+
     @pytest.mark.xfail
     @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("first_name,last_name,postal_code,invalid_field",

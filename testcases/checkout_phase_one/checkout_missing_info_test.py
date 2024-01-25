@@ -7,6 +7,14 @@ from testcases import BaseTest
 
 class TestCheckoutMissingInfo(BaseTest):
 
+    """
+    Steps:
+     * navigate to checkout one page
+     * fill shipping info with missing values
+     * click Continue button
+     * check error message
+    """
+
     @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("first_name,last_name,postal_code, missing_field",
                              params("testdata/missing_checkout_info.json"))

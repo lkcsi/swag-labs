@@ -51,7 +51,7 @@ class CheckoutOnePage(BasePage):
 
         return CartPage(self.driver, self.wait)
 
-    def fill_info(self, first_name, last_name, postal_code):
+    def fill_info(self, first_name="John", last_name="McClain", postal_code=8888):
         self.logger.info(f"type First Name: {first_name}")
         self.first_name = first_name
         self.logger.info(f"type Last Name: {last_name}")

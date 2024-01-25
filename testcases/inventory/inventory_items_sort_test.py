@@ -7,6 +7,14 @@ from selenium.common.exceptions import NoAlertPresentException
 
 class TestSort(BaseTest):
 
+    """
+    Steps:
+     * login and navigate to inventory page
+     * click to sort drop down
+     * select Name (A to Z) / Name (Z to A) / Price (low to high) / Price (high to low)
+     * check items order
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_order_az(self):
         self.order_by(SortBy.AZ, lambda x: x.title)

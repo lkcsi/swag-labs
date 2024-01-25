@@ -7,6 +7,14 @@ from testcases import BaseTest
 
 class TestCheckoutValidInfo(BaseTest):
 
+    """
+    Steps:
+     * navigate to checkout one page
+     * fill shipping info with valid values
+     * click Continue button
+     * check landing page
+    """
+
     @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("first_name,last_name,postal_code", params("testdata/valid_checkout_info.json"))
     def test_checkout_with_valid_info(self, first_name, last_name, postal_code):

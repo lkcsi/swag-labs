@@ -3,9 +3,17 @@ import pytest
 import re
 from testcases import BaseTest
 
+FUNCTION_PATTERN = r"\w+\.\w+\(\w*\)"
+
 
 class TestFunctionNameExposed(BaseTest):
-    FUNCTION_PATTERN = r"\w+\.\w+\(\w*\)"
+
+    """
+    Steps:
+     * login to app
+     * navigate to tested page with url
+     * check exposed functions in page content
+    """
 
     @pytest.mark.usefixtures("setup")
     def test_inventory_function_name_exposed(self):
@@ -29,5 +37,5 @@ class TestFunctionNameExposed(BaseTest):
 
     def check_page(self):
         text = self.driver.find_element(By.XPATH, "/html/body").text
-        matches = re.findall(self.FUNCTION_PATTERN, text)
+        matches = re.findall(FUNCTION_PATTERN, text)
         assert matches == []

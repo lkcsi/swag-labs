@@ -5,6 +5,14 @@ from testcases import BaseTest
 
 class TestCancelCheckoutOne(BaseTest):
 
+    """
+    Steps:
+     * navigate to checkout one page
+     * fill shipping info with valid values
+     * click Cancel button
+     * check landing page
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_cancel_checkout_one(self):
         checkout_one_page = self.go_to_checkout_one(add_all=True)

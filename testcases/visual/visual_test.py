@@ -10,6 +10,17 @@ RESULT = "compare_result"
 
 class TestVisual(BaseTest):
 
+    """
+    Steps:
+     * login to tested environment
+     * navigate to tested page
+     * take screenshot
+     * logout and clear local storage
+     * login to sample environment
+     * take screenshot
+     * compare screenshots
+    """
+
     correct_env_username = None
     correct_env_base_url = None
 
@@ -31,7 +42,7 @@ class TestVisual(BaseTest):
     @pytest.mark.visual(RESULT)
     @pytest.mark.usefixtures("setup", "correct_env")
     def test_checkout_one_visual(self):
-        self.perform(lambda: self.go_to_checkout_one(False, 0, 1))
+        self.perform(lambda: self.go_to_checkout_one(False, 0, 1).fill_info())
 
     @pytest.mark.visual(RESULT)
     @pytest.mark.usefixtures("setup", "correct_env")

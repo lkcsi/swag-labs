@@ -4,6 +4,21 @@ from testcases import BaseTest
 
 class TestCartCounterFromDetails(BaseTest):
 
+    """
+    Steps:
+     * navigate to inventory page
+     * for each item in inventory page:
+     ** click item image
+     ** click Add to cart button
+     ** check cart counter
+     ** click Back to products button
+     * for each item in inventory page:
+     ** click item image
+     ** click Remove button
+     ** check cart counter
+     ** click Back to products button
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_cart_counter_from_details(self):
         expected = 0

@@ -6,6 +6,14 @@ from pages import InventoryPage
 
 class TestCompletion(BaseTest):
 
+    """
+    Steps:
+     * add all items to cart
+     * navigate to finish page
+     * check landing page
+     * check cart counter
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_completion_back_home(self):
         complete_page = self.go_to_finish(add_all=True)

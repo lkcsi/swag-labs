@@ -51,6 +51,9 @@ class BaseTest:
         self.check_title(CompletePage.TITLE)
         return complete_page
 
+    def navigate(self, navigate_to):
+        self.driver.get(f"{self.base_url}/{navigate_to}.html")
+
     def logout(self):
         self.header.logout()
 

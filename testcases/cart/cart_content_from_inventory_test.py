@@ -4,6 +4,16 @@ from testcases import BaseTest
 
 class TestCartContentFromInventory(BaseTest):
 
+    """
+    Steps:
+     * navigate to inventory page
+     * for each item in inventory:
+     ** click Add to cart button
+     ** click Cart icon
+     ** check Cart content
+     ** click Continue Shopping button
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_cart_content_from_inventory(self):
         inventory_page = self.login()

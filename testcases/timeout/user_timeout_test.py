@@ -4,6 +4,14 @@ from testcases import BaseTest
 
 class TestTimeout(BaseTest):
 
+    """
+    Steps:
+     * login to app
+     * trigger timeout by remove cookies
+     * refresh page
+     * check error message
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_refresh_after_timeout(self):
         self.go_to_inventory()

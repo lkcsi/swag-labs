@@ -4,6 +4,14 @@ from testcases import BaseTest
 
 class TestCheckoutItemsOverview(BaseTest):
 
+    """
+    Steps:
+     * navigate to inventory page
+     * add all items
+     * navigate to checkout two page
+     * check overview items match with selected items
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_checkout_items_overview(self):
         inventory_page = self.login()

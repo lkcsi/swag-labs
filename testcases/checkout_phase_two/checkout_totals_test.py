@@ -9,6 +9,14 @@ TAX = 1.08
 
 class TestCheckoutTotals(BaseTest):
 
+    """
+    Steps:
+     * navigate to inventory page
+     * add all items
+     * navigate to checkout two page
+     * check total and subtotal values
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_checkout_totals(self):
         inventory_page = self.login()

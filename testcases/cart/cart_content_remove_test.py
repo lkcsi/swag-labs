@@ -4,6 +4,17 @@ from testcases import BaseTest
 
 class TestCartContentRemove(BaseTest):
 
+    """
+    Steps:
+     * navigate to inventory page
+     * add all items to cart
+     * click Cart icon
+     * check cart content
+     * for each item in cart:
+     ** click Remove button
+     ** check cart content
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_cart_remove(self):
         inventory_page = self.login()

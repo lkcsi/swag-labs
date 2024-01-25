@@ -4,6 +4,14 @@ import pytest
 
 class TestMissingCredentials(BaseTest):
 
+    """
+    Steps:
+     * navigate to login page
+     * type missing password / username
+     * click submit button
+     * check error text
+    """
+
     @pytest.mark.usefixtures("setup")
     def test_login_missing_username(self):
         self.username = ""
