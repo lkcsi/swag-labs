@@ -10,7 +10,7 @@ to use them as actual users.
 
 ## Prerequisites
 - Python (3.10 or above) and pip installed
-- Create a .env file in project root folder with **PASSWORD** field
+- Create a .env file in project root folder with **PASSWORD** field, password value can be found here: https://www.saucedemo.com
 - For Chrome include the ChromeDriver location in your PATH environment variable
 - For Firefox include Geckodriver location in your PATH environment variable
 
@@ -20,6 +20,12 @@ to use them as actual users.
 ## Run tests
 - Should be in project root folder 
 - Use **pytest** to run tests
+- Examples:
+```
+pytest --env=problem --browser=firefox
+pytest --env=visual --html=reports/visual.html
+pytest -k "logout_test" --browser=chrome
+```
 
 ## CLI options
 - **--browser** for choose browser, available options are: chrome | firefox
@@ -33,8 +39,16 @@ to use them as actual users.
 - **WaitTime** is the threshold in seconds, within web elements should be presented
 
 ## Pytest config file
-- Contains common cli options to fine tune pytest behavior
+Contains common cli options to fine tune pytest behavior
 
 ## Environment file
-- .env
-- Store login password here. **PASSWORD**=password, password value can be found here: https://www.saucedemo.com
+**.env** file stores login password. **PASSWORD**=password, password value can be found here: https://www.saucedemo.com
+
+## Report
+Reports can be found in ./reports folder, the provided screenshots are relative to this path, so relocating reports will 
+screw up screenshot 
+
+## Todo
+- [ ] reports should be self-contained
+- [ ] cleanup screenshot folder
+- [ ] try selenium page factory
