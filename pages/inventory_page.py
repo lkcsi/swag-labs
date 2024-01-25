@@ -42,6 +42,7 @@ class InventoryItem(Item):
         self.remove_button_locator = (By.XPATH, f"//button[@data-test='{data_test}']")
 
     def click_image(self):
+        self.logger.info(f"click {self.title}'s image")
         image_link = self.wait.until(ec.presence_of_element_located(self.image_link_locator))
         image_link.click()
         return DetailsPage(self.driver, self.wait)
@@ -64,6 +65,7 @@ class InventoryItem(Item):
         button.click()
 
     def click_title(self):
+        self.logger.info(f"click {self.title}'s title")
         title = self.wait.until(ec.presence_of_element_located(self.title_link_locator))
         title.click()
         return DetailsPage(self.driver, self.wait)

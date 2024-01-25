@@ -7,7 +7,7 @@ from pages import InventoryPage
 class TestCompletion(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    def test_back_home(self):
+    def test_completion_back_home(self):
         complete_page = self.go_to_finish(add_all=True)
         complete_page.back_to_home()
 

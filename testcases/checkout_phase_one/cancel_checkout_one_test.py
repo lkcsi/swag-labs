@@ -6,7 +6,7 @@ from testcases import BaseTest
 class TestCancelCheckoutOne(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    def test_cancel_checkout_phase_one(self):
+    def test_cancel_checkout_one(self):
         checkout_one_page = self.go_to_checkout_one(add_all=True)
         checkout_one_page.fill_info("John", "McClain", 8888)
 

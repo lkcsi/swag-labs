@@ -7,7 +7,8 @@ class TestInvalidUsernameTest(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("testdata/invalid_usernames.json"))
-    def test_wrong_user(self, username, password):
+    def test_login_invalid_username(self, username, password):
+
         self.username = username
         self.password = password
         self.login()

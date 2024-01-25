@@ -4,26 +4,26 @@ import re
 from testcases import BaseTest
 
 
-class TestTextContent(BaseTest):
+class TestFunctionNameExposed(BaseTest):
     FUNCTION_PATTERN = r"\w+\.\w+\(\w*\)"
 
     @pytest.mark.usefixtures("setup")
-    def test_inventory_functions_exposed(self):
+    def test_inventory_function_name_exposed(self):
         self.login()
         self.check_page()
 
     @pytest.mark.usefixtures("setup")
-    def test_cart_functions_exposed(self):
+    def test_cart_function_name_exposed(self):
         self.go_to_cart(add_all=True)
         self.check_page()
 
     @pytest.mark.usefixtures("setup")
-    def test_checkout_one_functions_exposed(self):
+    def test_checkout_one_function_name_exposed(self):
         self.go_to_checkout_one(add_all=True)
         self.check_page()
 
     @pytest.mark.usefixtures("setup")
-    def test_checkout_two_functions_exposed(self):
+    def test_checkout_two_function_name_exposed(self):
         self.go_to_checkout_two(add_all=True)
         self.check_page()
 

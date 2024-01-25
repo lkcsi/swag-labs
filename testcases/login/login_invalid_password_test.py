@@ -3,11 +3,11 @@ import pytest
 from utilities import params_from_json as params
 
 
-class TestInvalidPassword(BaseTest):
+class TestLoginInvalidPassword(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("username,password", params("testdata/invalid_passwords.json"))
-    def test_wrong_password(self, username, password):
+    def test_login_invalid_password(self, username, password):
         self.username = username
         self.password = password
         self.login()

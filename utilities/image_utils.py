@@ -53,9 +53,14 @@ def save_image(item):
             "onclick='window.open(this.src)' align='right'/><div>")
 
 
+def take_screenshot(file_name, driver):
+    file_path = os.path.join("screenshots", f"{file_name}.png")
+    driver.save_screenshot(file_path)
+
+
 def get_visual_test_marker(item):
     for marker in item.own_markers:
-        if marker.name == "visualtest":
+        if marker.name == "visual":
             return True, marker.args[0]
     return False, ""
 

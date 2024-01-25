@@ -16,7 +16,7 @@ class Burger(object):
         self.wait.until(ec.presence_of_element_located(HeaderLocators.BURGER)).click()
 
     def click_logout(self):
-        self.wait.until(ec.presence_of_element_located(HeaderLocators.LOGOUT)).click()
+        self.wait.until(ec.visibility_of_element_located(HeaderLocators.LOGOUT)).click()
 
 
 class Cart(object):

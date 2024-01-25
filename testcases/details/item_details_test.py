@@ -5,12 +5,12 @@ from testcases import BaseTest
 class TestItemDetails(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    def test_open_with_image(self):
+    def test_details_open_with_image(self):
         inventory_page = self.login()
         self.open_with(lambda x: x.click_title(), inventory_page)
 
     @pytest.mark.usefixtures("setup")
-    def test_open_with_title(self):
+    def test_details_open_with_title(self):
         inventory_page = self.login()
         self.open_with(lambda x: x.click_image(), inventory_page)
 

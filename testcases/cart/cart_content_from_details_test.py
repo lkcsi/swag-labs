@@ -2,7 +2,7 @@ import pytest
 from testcases import BaseTest
 
 
-class TestCartContent(BaseTest):
+class TestCartContentFromDetails(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     def test_cart_content_from_details(self):

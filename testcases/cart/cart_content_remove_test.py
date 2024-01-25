@@ -2,7 +2,7 @@ import pytest
 from testcases import BaseTest
 
 
-class TestCartContent(BaseTest):
+class TestCartContentRemove(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     def test_cart_remove(self):

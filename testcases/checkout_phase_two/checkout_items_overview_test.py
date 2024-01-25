@@ -2,10 +2,10 @@ import pytest
 from testcases import BaseTest
 
 
-class TestCheckoutItems(BaseTest):
+class TestCheckoutItemsOverview(BaseTest):
 
     @pytest.mark.usefixtures("setup")
-    def test_overview_items(self):
+    def test_checkout_items_overview(self):
         inventory_page = self.login()
         inventory_page.add_all_items()
 

@@ -3,7 +3,7 @@ from pages import InventoryPage, CheckoutTwoPage
 from testcases import BaseTest
 
 
-class TestCancelCheckout(BaseTest):
+class TestCancelCheckoutTwo(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     def test_cancel_checkout_two(self):

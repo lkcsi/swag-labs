@@ -2,7 +2,7 @@ import pytest
 from testcases import BaseTest
 
 
-class TestCartCounter(BaseTest):
+class TestCartCounterFromInventory(BaseTest):
 
     @pytest.mark.usefixtures("setup")
     def test_cart_counter_from_inventory(self):

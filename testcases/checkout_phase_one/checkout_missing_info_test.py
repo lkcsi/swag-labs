@@ -10,7 +10,7 @@ class TestCheckoutMissingInfo(BaseTest):
     @pytest.mark.usefixtures("setup")
     @pytest.mark.parametrize("first_name,last_name,postal_code, missing_field",
                              params("testdata/missing_checkout_info.json"))
-    def test_missing_input(self, first_name, last_name, postal_code, missing_field):
+    def test_checkout_missing_input(self, first_name, last_name, postal_code, missing_field):
         checkout_one_page = self.go_to_checkout_one(add_all=True)
         checkout_one_page.fill_and_continue(first_name, last_name, postal_code)
 
